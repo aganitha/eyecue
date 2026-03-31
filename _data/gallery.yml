@@ -1,0 +1,13 @@
+- system_type: "Kinase Inhibition"
+  videos:
+    - title: "Imatinib Binding to Abl Kinase"
+      description: "Visualization of Imatinib entering the active site of the c-Abl kinase, demonstrating the induced fit mechanism."
+      youtube_id: "dQw4w9WgXcQ" # Replace with actual YouTube ID
+- system_type: "Protein Folding"
+  videos:
+    - title: "Villin Headpiece Domain Folding"
+      description: "EyeCue audio-visual interpretation highlighting the rapid folding of the Villin headpiece and the formation of its hydrophobic core."
+      youtube_id: "dQw4w9WgXcQ" # Replace with actual YouTube ID
+    - title: "Trp-cage Miniprotein Dynamics"
+      description: "Analysis of the Trp-cage unfolding pathway at high temperatures."
+      youtube_id: "dQw4w9WgXcQ" # Replace with actual YouTube ID

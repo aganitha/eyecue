@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title | default: site.title }}</title>
+  <style>
+    :root {
+      /* Matching Aganitha.ai corporate colors implicitly based on typical tech-corporate palettes */
+      --primary-color: #0b3d91; /* A deep corporate blue */
+      --secondary-color: #f7f9fc;
+      --text-color: #333333;
+      --text-muted: #666666;
+      --border-color: #e2e8f0;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      color: var(--text-color);
+      background-color: var(--secondary-color);
+      line-height: 1.6;
+    }
+    header {
+      background-color: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    header img.logo {
+      height: 40px;
+      display: block;
+    }
+    nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--text-color);
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    nav a:hover, nav a.active {
+      color: var(--primary-color);
+    }
+    main {
+      padding: 3rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      min-height: calc(100vh - 160px);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background-color: #ffffff;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+    /* Typography for standard markdown content */
+    h1 { color: var(--primary-color); margin-top: 0; }
+    h2 { border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-top: 2rem; }
+    a { color: var(--primary-color); }
+    
+    /* Content wrapper for standard pages like About and Contact */
+    .content-box {
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid var(--border-color);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="{{ site.baseurl }}/" class="logo-link">
+      <img src="{{ site.logo }}" alt="Aganitha.ai Logo" class="logo">
+    </a>
+    <nav>
+      <a href="{{ site.baseurl }}/">Gallery</a>
+      <a href="{{ site.baseurl }}/about/">About EyeCue</a>
+      <a href="{{ site.baseurl }}/contact/">Contact Us</a>
+    </nav>
+  </header>
+  
+  <main>
+    {{ content }}
+  </main>
+
+  <footer>
+    &copy; {{ site.time | date: '%Y' }} <a href="https://www.aganitha.ai/" target="_blank">Aganitha AI</a>. All rights reserved.<br>
+    Powered by EyeCue.
+  </footer>
+</body>
+</html>
