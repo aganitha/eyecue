@@ -8,11 +8,11 @@ permalink: /about/
 
 # About EyeCue
 
-EyeCue is a transformative, multi-model AI agent engineered by **[Aganitha.ai](https://www.aganitha.ai/)**. It is specifically designed to interpret molecular dynamics (MD) trajectories, generating comprehensive audio-visual explanations that make complex chemical and physical phenomena intuitively understandable.
+EyeCue is a multimodal AI agent engineered by **[Aganitha.ai](https://www.aganitha.ai/)** to interpret molecular dynamics (MD) trajectories with audio-visual explanations.
 
 ## Research Citation
 
-EyeCue has been built upon rigorous scientific research and state-of-the-art multi-modal models. If you utilize EyeCue for your research or educational needs, we request that you kindly cite our recent publication:
+If you utilize EyeCue for your research or educational needs, we request that you kindly cite our publication:
 
 > **[To be updated: Title of the EyeCue Publication]**  
 > *Aganitha Research Team*  
