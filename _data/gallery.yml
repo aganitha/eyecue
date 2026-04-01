@@ -1,13 +1,23 @@
-- system_type: "Kinase Inhibition"
+- system_type: "Class A GPCR bound to its modulators"
   videos:
-    - title: "Imatinib Binding to Abl Kinase"
-      description: "Visualization of Imatinib entering the active site of the c-Abl kinase, demonstrating the induced fit mechanism."
+    - title: "Cognate ligand S1P bound to S1PR1"
+      description: "S1P is intercating with the membrane bound S1PR1 through hydrophilic head towards the extracellular region and hydrophobic tail inside the transmembrane helices"
       youtube_id: "dQw4w9WgXcQ" # Replace with actual YouTube ID
-- system_type: "Protein Folding"
+    - title: "FDA approved drug Siponimod interacting with membrane bound S1PR1"
+      description: "Siponimod has a polar head towards the extracellular region and a hydrophobic tail interctaing with residues in the transmembrane region  "
+      youtube_id: "dQw4w9WgXcQ" # Replace with actual YouTube ID
+- system_type: "PROTACs"
   videos:
-    - title: "Villin Headpiece Domain Folding"
-      description: "EyeCue audio-visual interpretation highlighting the rapid folding of the Villin headpiece and the formation of its hydrophobic core."
+    - title: "Evaluating PROTACs for hard-to-target BRD4 protein"
+      description: "A PROTAC molecule is holding the protein-of-interest closer to the E3 ligase to form a ternary complex"
       youtube_id: "dQw4w9WgXcQ" # Replace with actual YouTube ID
-    - title: "Trp-cage Miniprotein Dynamics"
-      description: "Analysis of the Trp-cage unfolding pathway at high temperatures."
+- system_type: "Covalent binders"
+  videos:
+    - title: "Sotorasib bound to KRAS"
+      description: "Highlighting covalent and non-covalent intercations of Sotorasib in binding cavity of KRAS consisting of p-loop, switch I and switch II"
+      youtube_id: "dQw4w9WgXcQ" # Replace with actual YouTube ID
+- system_type: "surfactants: micelle formation and fabric intercation"
+  videos:
+    - title: "Surfactant-cellulose interctaion"
+      description: "Surfactant molecules above c.m.c. forming short miceller aggregates to interact with different faces of cellulose fibril"
       youtube_id: "dQw4w9WgXcQ" # Replace with actual YouTube ID
