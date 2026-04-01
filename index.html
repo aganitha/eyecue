@@ -9,46 +9,61 @@ title: EyeCue Video Gallery
     scroll-snap-type: y proximity;
   }
   
-  .intro-section {
-    scroll-snap-align: center;
-    min-height: 40vh;
+  /* Hero Section */
+  .hero-section {
+    scroll-snap-align: start;
+    min-height: calc(100vh - 80px); /* Fill the screen */
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    align-items: center; /* Center vertically */
+    justify-content: space-between;
+    gap: 4rem;
     scroll-margin-top: 80px;
-    margin-bottom: 2rem;
+    padding: 4rem 0; /* Breathing room */
+    box-sizing: border-box;
+  }
+
+  .hero-content {
+    flex: 1;
+    max-width: 600px;
+  }
+
+  .hero-controls {
+    flex: 1;
+    max-width: 500px;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    padding: 2.5rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+  }
+
+  @media (max-width: 900px) {
+    .hero-section {
+      flex-direction: column;
+      min-height: auto;
+      gap: 3rem;
+      padding: 3rem 0;
+    }
+    .hero-content, .hero-controls {
+      max-width: 100%;
+    }
   }
 
   /* Controls (Filters/Search) */
-  .gallery-controls {
-    margin: 2rem 0; 
-    padding: 1rem 1.5rem; 
-    background: #fff; 
-    border-radius: 12px; 
-    border: 1px solid var(--border-color); 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03); 
-    display: flex; 
-    flex-wrap: wrap; 
-    gap: 1.5rem; 
-    align-items: center; 
-    justify-content: space-between;
-    position: sticky; 
-    top: 73px; /* Stays below main header */
-    z-index: 990;
-  }
   .filter-group {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.6rem;
     flex-wrap: wrap;
     align-items: center;
   }
   .filter-label {
-    font-weight: 600; 
+    font-weight: 700; 
     font-size: 0.95rem; 
     margin-right: 0.2rem;
+    color: var(--text-color);
   }
   .filter-btn {
-    padding: 0.4rem 1rem; 
+    padding: 0.5rem 1.2rem; 
     background: var(--secondary-color); 
     border: 1px solid var(--border-color); 
     border-radius: 20px; 
@@ -58,6 +73,7 @@ title: EyeCue Video Gallery
     transition: all 0.2s;
     font-family: inherit;
     white-space: nowrap;
+    font-weight: 500;
   }
   .filter-btn:hover {
     background: #e2e8f0;
@@ -69,30 +85,29 @@ title: EyeCue Video Gallery
   }
   .search-box {
     position: relative; 
-    flex-grow: 1; 
-    max-width: 350px;
-    min-width: 250px;
+    width: 100%;
   }
   .search-box input {
     width: 100%; 
-    padding: 0.6rem 1rem 0.6rem 2.5rem; 
-    border-radius: 20px; 
+    padding: 0.8rem 1.2rem 0.8rem 2.8rem; 
+    border-radius: 8px; 
     border: 1px solid var(--border-color); 
-    font-size: 0.95rem; 
+    font-size: 1rem; 
     box-sizing: border-box;
     font-family: inherit;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
   .search-box input:focus {
     border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(11, 61, 145, 0.1);
   }
   .search-icon {
     position: absolute; 
-    left: 10px; 
+    left: 14px; 
     top: 50%; 
     transform: translateY(-50%); 
-    color: #999;
+    color: #888;
   }
 
   /* Gallery Layout */
@@ -111,18 +126,19 @@ title: EyeCue Video Gallery
 
   .feed-card {
     scroll-snap-align: center;
-    scroll-margin-top: 180px; 
-    min-height: calc(100vh - 200px);
+    scroll-margin-top: 80px; /* Only needs space for sticky master header now */
+    min-height: calc(100vh - 100px); /* Maximize height for video */
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-bottom: 2rem;
+    padding: 2rem 0; /* Breathing room */
+    box-sizing: border-box;
   }
 
   /* Minimap */
   .minimap-container {
     position: sticky;
-    top: 170px;
+    top: 100px;
     right: 0;
     width: 40px;
     flex-shrink: 0;
@@ -171,7 +187,7 @@ title: EyeCue Video Gallery
 
   .minimap-dot:hover, .minimap-dot.active {
     background-color: var(--primary-color);
-    transform: scale(1.5);
+    transform: scale(1.6);
   }
 
   .minimap-tooltip {
@@ -205,6 +221,7 @@ title: EyeCue Video Gallery
     display: flex; 
     flex-direction: column;
     width: 100%;
+    max-height: 100%; /* Prevent overflowing the viewport if content is huge */
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
   .video-card-inner:hover {
@@ -217,9 +234,9 @@ title: EyeCue Video Gallery
   .no-results {
     display: none;
     text-align: center;
-    padding: 3rem;
+    padding: 4rem;
     background: #fff;
-    border-radius: 12px;
+    border-radius: 16px;
     border: 1px solid var(--border-color);
     color: var(--text-muted);
     font-size: 1.1rem;
@@ -227,32 +244,49 @@ title: EyeCue Video Gallery
   }
 </style>
 
-<div class="intro-section" id="intro">
-  <h1 style="font-size: 3rem; margin-bottom: 1rem;">EyeCue Gallery</h1>
-  <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 800px; line-height: 1.6;">
-    {{ site.description }}
-  </p>
-  <p style="color: var(--primary-color); font-weight: 500; font-size: 1.1rem; margin-top: 2rem;">
-    ↓ Scroll down to explore presentations
-  </p>
-</div>
-
-<!-- Controls / Filters -->
-<div class="gallery-controls">
-  <div class="filter-group">
-    <span class="filter-label">Category:</span>
-    <button onclick="filterGallery('all')" class="filter-btn active" data-filter="all">All</button>
-    {% for category in site.data.gallery %}
-      {% assign cat_id = category.system_type | slugify %}
-      <button onclick="filterGallery('{{ cat_id }}')" class="filter-btn" data-filter="{{ cat_id }}">{{ category.system_type }}</button>
-    {% endfor %}
+<!-- Hero Section -->
+<div class="hero-section" id="hero">
+  <div class="hero-content">
+    <h1 style="font-size: 3.5rem; margin-bottom: 1.5rem; line-height: 1.1; letter-spacing: -1px; color: var(--primary-color);">EyeCue Gallery</h1>
+    <p style="font-size: 1.25rem; color: var(--text-muted); line-height: 1.6;">
+      {{ site.description }}
+    </p>
+    <div style="color: var(--primary-color); font-weight: 600; font-size: 1.1rem; margin-top: 2.5rem; display: flex; align-items: center; gap: 0.5rem; animation: bounce 2s infinite;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+      Scroll down to explore
+    </div>
   </div>
   
-  <div class="search-box">
-    <input type="text" id="searchInput" onkeyup="searchGallery()" placeholder="Search videos...">
-    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+  <div class="hero-controls">
+    <h3 style="margin-top: 0; margin-bottom: 1.5rem; font-size: 1.35rem; color: var(--text-color);">Find a Presentation</h3>
+    
+    <div style="margin-bottom: 2rem;">
+      <div class="search-box">
+        <input type="text" id="searchInput" onkeyup="searchGallery()" placeholder="Search videos by title or keyword...">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </div>
+    </div>
+    
+    <div>
+      <span class="filter-label" style="display: block; margin-bottom: 1rem;">Filter by Category:</span>
+      <div class="filter-group">
+        <button onclick="filterGallery('all')" class="filter-btn active" data-filter="all">All</button>
+        {% for category in site.data.gallery %}
+          {% assign cat_id = category.system_type | slugify %}
+          <button onclick="filterGallery('{{ cat_id }}')" class="filter-btn" data-filter="{{ cat_id }}">{{ category.system_type }}</button>
+        {% endfor %}
+      </div>
+    </div>
   </div>
 </div>
+
+<style>
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+}
+</style>
 
 <div class="gallery-layout">
   <!-- Left Side: Presentation Feed -->
@@ -291,8 +325,9 @@ title: EyeCue Video Gallery
     {% endfor %}
 
     <div id="no-results" class="no-results">
-      <p style="margin:0;">No videos found matching your criteria.</p>
-      <button onclick="document.getElementById('searchInput').value=''; filterGallery('all'); searchGallery();" style="margin-top: 1rem; padding: 0.5rem 1.5rem; background: var(--primary-color); color: white; border: none; border-radius: 20px; cursor: pointer;">Clear Filters</button>
+      <h3 style="margin-top:0; color: var(--text-color);">No videos found</h3>
+      <p>Try adjusting your search query or clearing your filter.</p>
+      <button onclick="document.getElementById('searchInput').value=''; filterGallery('all'); searchGallery();" style="margin-top: 1rem; padding: 0.75rem 2rem; background: var(--primary-color); color: white; border: none; border-radius: 30px; cursor: pointer; font-size: 1rem; font-weight: 600;">Clear All Filters</button>
     </div>
   </div>
 
@@ -336,6 +371,17 @@ title: EyeCue Video Gallery
     });
 
     applyFilters();
+    
+    // Smooth scroll to first matching video if user is in hero section and searches/filters
+    const heroBottom = document.getElementById('hero').getBoundingClientRect().bottom;
+    if (heroBottom > 0) {
+      setTimeout(() => {
+        const firstVisibleCard = Array.from(document.querySelectorAll('.feed-card')).find(card => card.style.display !== 'none');
+        if (firstVisibleCard) {
+            firstVisibleCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+    }
   }
 
   function searchGallery() {
