@@ -6,21 +6,23 @@ permalink: /contact/
 
 <div class="content-box" markdown="1">
 
-# Contact and Licensing
+# Requests for addition to Gallery
 
-The EyeCue AI framework offers unprecedented capabilities in making MD trajectories highly interpretable. 
+Do you want to have your MD trajectories interpreted by EyeCue and featured in the gallery? Please reach out to us at [eyecue@aganitha.ai](mailto:eyecue@aganitha.ai).
+
+# Licensing
+
+The EyeCue AI Agent automates interpretation of MD trajectories at expert level, enabling scalable analysis of large design spaces. We offer tailored licensing models to fit different organizational needs. 
 
 ## Licensing Options
 
-We offer tailored licensing models to fit different organizational needs. Procurement is available for:
-
-1. **Commercial Use:** Full integration into internal computational chemistry and drug discovery pipelines.
-2. **Educational Purposes:** Subsidized or specific licenses for academic institutions building learning materials.
-3. **Non-Commercial Research:** Accessible options for public research institutes working on fundamental science.
+1. **Commercial Use:** For use in commercial R&D pipelines.
+2. **Educational Purposes:** For use by academic institutions in teaching.
+3. **Non-Commercial Research:** For use by non-profit or public funded research institutes.
 
 ## Get in Touch
 
-To procure a license to EyeCue, or if you have any questions regarding capabilities and deployments, please reach out via:
+To procure a license to EyeCue, or if you have any questions regarding capabilities and deployments:
 
 *   E-mail to [crmteam@aganitha.ai](mailto:crmteam@aganitha.ai), OR
 *   Use the [contact us form](https://www.aganitha.ai/company/contact/)
