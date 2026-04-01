@@ -225,7 +225,7 @@ title: EyeCue Video Gallery
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
   .video-card-inner:hover {
-    transform: scale(1.02);
+    transform: scale(1.01);
   }
   .video-info {
     padding: 2rem;
@@ -253,7 +253,7 @@ title: EyeCue Video Gallery
     </p>
     <div style="color: var(--primary-color); font-weight: 600; font-size: 1.1rem; margin-top: 2.5rem; display: flex; align-items: center; gap: 0.5rem; animation: bounce 2s infinite;">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
-      Scroll down to explore
+      Scroll down to auto-play presentations
     </div>
   </div>
   
@@ -297,19 +297,26 @@ title: EyeCue Video Gallery
       {% for video in category.videos %}
         <div class="feed-card" id="{{ cat_id }}-{{ forloop.index }}" data-category="{{ cat_id }}" data-title="{{ video.title | downcase | escape }}" data-desc="{{ video.description | downcase | escape }}">
           
-          <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
-             <span style="background: var(--primary-color); color: white; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
-               {{ category.system_type }}
-             </span>
-             <span style="color: var(--text-muted); font-size: 0.9rem; font-weight: 500;">
-               Video {{ forloop.index }} of {{ category.videos.size }}
+          <div style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+             <div style="display: flex; align-items: center; gap: 1rem;">
+               <span style="background: var(--primary-color); color: white; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                 {{ category.system_type }}
+               </span>
+               <span style="color: var(--text-muted); font-size: 0.9rem; font-weight: 500;">
+                 Video {{ forloop.index }} of {{ category.videos.size }}
+               </span>
+             </div>
+             
+             <!-- Auto-play indicator -->
+             <span class="playing-indicator" style="display: none; align-items: center; gap: 0.3rem; color: #DC2626; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; animation: pulse 2s infinite;">
+                <span style="width: 8px; height: 8px; background: #DC2626; border-radius: 50%;"></span> Now Playing
              </span>
           </div>
 
           <div class="video-card-inner">
-            <!-- 16:9 Aspect Ratio Container -->
-            <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; cursor: pointer;" onclick="playVideo(this, '{{ video.youtube_id }}')">
-              <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('https://img.youtube.com/vi/{{ video.youtube_id }}/maxresdefault.jpg') center/cover; opacity: 0.85; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'"></div>
+            <!-- 16:9 Aspect Ratio Container class -->
+            <div class="yt-container" data-vid="{{ video.youtube_id }}" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; cursor: pointer;">
+              <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('https://img.youtube.com/vi/{{ video.youtube_id }}/maxresdefault.jpg') center/cover; opacity: 0.85;"></div>
               <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 56px; background: rgba(220, 38, 38, 0.9); border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5); pointer-events: none;">
                  <svg width="40" height="40" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
               </div>
@@ -347,13 +354,36 @@ title: EyeCue Video Gallery
   </div>
 </div>
 
+<style>
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+</style>
+
 <script>
-  function playVideo(container, videoId) {
-    const iframeHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" 
+  function loadAndPlayVideo(container, videoId) {
+    if (container.querySelector('iframe')) return; // Already loaded
+    
+    // Save original thumbnail logic to restore later
+    if (!container.dataset.thumbnailHtml) {
+        container.dataset.thumbnailHtml = container.innerHTML;
+    }
+    
+    // Autoplay requires mute=1 on modern browsers without prior user interaction
+    const iframeHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" 
                                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                                 allowfullscreen></iframe>`;
     container.innerHTML = iframeHTML;
+  }
+
+  function stopAndUnloadVideo(container) {
+    if (container.dataset.thumbnailHtml && container.querySelector('iframe')) {
+        // Restore thumbnail, effectively destroying the iframe player to pause it and free RAM
+        container.innerHTML = container.dataset.thumbnailHtml;
+    }
   }
 
   // Filter and Search Logic
@@ -440,22 +470,33 @@ title: EyeCue Video Gallery
     }
   }
 
-  // Highlight the active minimap dot based on scroll position using Intersection Observer
+  // Intersection Observer for Auto-play and Minimap highlighting
   document.addEventListener("DOMContentLoaded", function() {
+    // Add manual click-to-play support just in case
+    document.querySelectorAll('.yt-container').forEach(container => {
+        container.addEventListener('click', function() {
+            loadAndPlayVideo(this, this.getAttribute('data-vid'));
+        });
+    });
+
     const cards = document.querySelectorAll('.feed-card');
     const mapLinks = document.querySelectorAll('.minimap-dot');
     
-    // Configure observer to trigger when a card crosses the middle of the viewport
+    // Trigger when a card has at least 50% visibility
     const observerOptions = {
       root: null,
-      rootMargin: '-30% 0px -50% 0px', 
-      threshold: 0
+      rootMargin: '0px', 
+      threshold: 0.5
     };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
+        const card = entry.target;
+        const id = card.getAttribute('id');
+        const ytContainer = card.querySelector('.yt-container');
+        const playingIndicator = card.querySelector('.playing-indicator');
+
         if (entry.isIntersecting) {
-          const id = entry.target.getAttribute('id');
           // Update active states on minimap
           mapLinks.forEach(link => {
             link.classList.remove('active');
@@ -463,6 +504,23 @@ title: EyeCue Video Gallery
               link.classList.add('active');
             }
           });
+
+          // Play video, show indicator
+          if (ytContainer) {
+             loadAndPlayVideo(ytContainer, ytContainer.getAttribute('data-vid'));
+          }
+          if (playingIndicator) {
+             playingIndicator.style.display = 'flex';
+          }
+
+        } else {
+          // Video is leaving the screen - stop it, hide indicator
+          if (ytContainer) {
+             stopAndUnloadVideo(ytContainer);
+          }
+          if (playingIndicator) {
+             playingIndicator.style.display = 'none';
+          }
         }
       });
     }, observerOptions);
