@@ -3,31 +3,23 @@ layout: default
 title: EyeCue Video Gallery
 ---
 
-<div>
-  <h1>EyeCue Gallery</h1>
-  <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 800px;">
-    {{ site.description }}
-  </p>
-</div>
-
-<!-- Controls / Filters -->
-<div class="gallery-controls">
-  <div class="filter-group">
-    <span class="filter-label">Category:</span>
-    <button onclick="filterGallery('all')" class="filter-btn active" data-filter="all">All</button>
-    {% for category in site.data.gallery %}
-      {% assign cat_id = category.system_type | slugify %}
-      <button onclick="filterGallery('{{ cat_id }}')" class="filter-btn" data-filter="{{ cat_id }}">{{ category.system_type }}</button>
-    {% endfor %}
-  </div>
-  
-  <div class="search-box">
-    <input type="text" id="searchInput" onkeyup="searchGallery()" placeholder="Search videos...">
-    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-  </div>
-</div>
-
 <style>
+  html {
+    scroll-behavior: smooth;
+    scroll-snap-type: y proximity;
+  }
+  
+  .intro-section {
+    scroll-snap-align: center;
+    min-height: 40vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    scroll-margin-top: 80px;
+    margin-bottom: 2rem;
+  }
+
+  /* Controls (Filters/Search) */
   .gallery-controls {
     margin: 2rem 0; 
     padding: 1rem 1.5rem; 
@@ -102,24 +94,126 @@ title: EyeCue Video Gallery
     transform: translateY(-50%); 
     color: #999;
   }
-  .system-section {
-    transition: opacity 0.3s ease;
-    scroll-margin-top: 160px;
+
+  /* Gallery Layout */
+  .gallery-layout {
+    display: flex;
+    gap: 2rem;
+    position: relative;
+    align-items: flex-start;
   }
-  .video-card {
+
+  .feed-container {
+    flex-grow: 1;
+    max-width: calc(100% - 60px); /* Leave room for minimap */
+    margin: 0;
+  }
+
+  .feed-card {
+    scroll-snap-align: center;
+    scroll-margin-top: 180px; 
+    min-height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  /* Minimap */
+  .minimap-container {
+    position: sticky;
+    top: 170px;
+    right: 0;
+    width: 40px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    z-index: 900;
+  }
+
+  @media (max-width: 768px) {
+    .minimap-container {
+      display: none; /* Hide on very small screens */
+    }
+    .feed-container { max-width: 100%; }
+  }
+
+  .minimap-category {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .minimap-cat-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    letter-spacing: 1px;
+    margin-bottom: 0.4rem;
+  }
+
+  .minimap-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--border-color); 
+    transition: all 0.3s;
+    position: relative;
+    display: block;
+    cursor: pointer;
+  }
+
+  .minimap-dot:hover, .minimap-dot.active {
+    background-color: var(--primary-color);
+    transform: scale(1.5);
+  }
+
+  .minimap-tooltip {
+    position: absolute;
+    right: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.85);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+
+  .minimap-dot:hover .minimap-tooltip {
+    opacity: 1;
+    transform: translateY(-50%) translateX(-5px);
+  }
+
+  .video-card-inner {
     background: white; 
-    border-radius: 12px; 
+    border-radius: 16px; 
     overflow: hidden; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08); 
     border: 1px solid var(--border-color); 
     display: flex; 
     flex-direction: column;
-    transition: transform 0.2s, box-shadow 0.2s;
+    width: 100%;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
-  .video-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  .video-card-inner:hover {
+    transform: scale(1.02);
   }
+  .video-info {
+    padding: 2rem;
+  }
+
   .no-results {
     display: none;
     text-align: center;
@@ -133,40 +227,92 @@ title: EyeCue Video Gallery
   }
 </style>
 
-<div id="gallery-container">
-{% for category in site.data.gallery %}
-  {% assign cat_id = category.system_type | slugify %}
-  <section id="section-{{ cat_id }}" class="system-section" data-category="{{ cat_id }}" style="margin-top: 3rem;">
-    <h2>{{ category.system_type }}</h2>
-    
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; margin-top: 1.5rem;" class="video-grid">
+<div class="intro-section" id="intro">
+  <h1 style="font-size: 3rem; margin-bottom: 1rem;">EyeCue Gallery</h1>
+  <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 800px; line-height: 1.6;">
+    {{ site.description }}
+  </p>
+  <p style="color: var(--primary-color); font-weight: 500; font-size: 1.1rem; margin-top: 2rem;">
+    ↓ Scroll down to explore presentations
+  </p>
+</div>
+
+<!-- Controls / Filters -->
+<div class="gallery-controls">
+  <div class="filter-group">
+    <span class="filter-label">Category:</span>
+    <button onclick="filterGallery('all')" class="filter-btn active" data-filter="all">All</button>
+    {% for category in site.data.gallery %}
+      {% assign cat_id = category.system_type | slugify %}
+      <button onclick="filterGallery('{{ cat_id }}')" class="filter-btn" data-filter="{{ cat_id }}">{{ category.system_type }}</button>
+    {% endfor %}
+  </div>
+  
+  <div class="search-box">
+    <input type="text" id="searchInput" onkeyup="searchGallery()" placeholder="Search videos...">
+    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+  </div>
+</div>
+
+<div class="gallery-layout">
+  <!-- Left Side: Presentation Feed -->
+  <div class="feed-container">
+    {% for category in site.data.gallery %}
+      {% assign cat_id = category.system_type | slugify %}
+      
       {% for video in category.videos %}
-        <div class="video-card" data-title="{{ video.title | downcase | escape }}" data-desc="{{ video.description | downcase | escape }}">
-          <!-- 16:9 Aspect Ratio Container for YouTube - Lazy Loaded -->
-          <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; cursor: pointer;" onclick="playVideo(this, '{{ video.youtube_id }}')">
-            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('https://img.youtube.com/vi/{{ video.youtube_id }}/hqdefault.jpg') center/cover; opacity: 0.8; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"></div>
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 68px; height: 48px; background: rgba(220, 38, 38, 0.9); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); pointer-events: none;">
-               <svg width="32" height="32" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-            </div>
+        <div class="feed-card" id="{{ cat_id }}-{{ forloop.index }}" data-category="{{ cat_id }}" data-title="{{ video.title | downcase | escape }}" data-desc="{{ video.description | downcase | escape }}">
+          
+          <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+             <span style="background: var(--primary-color); color: white; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+               {{ category.system_type }}
+             </span>
+             <span style="color: var(--text-muted); font-size: 0.9rem; font-weight: 500;">
+               Video {{ forloop.index }} of {{ category.videos.size }}
+             </span>
           </div>
-          <div style="padding: 1.5rem; flex-grow: 1; display:flex; flex-direction:column;">
-            <h3 style="margin: 0 0 0.5rem 0; font-size: 1.15rem; color: var(--text-color); line-height: 1.4;">{{ video.title }}</h3>
-            <p style="font-size: 0.95rem; color: var(--text-muted); margin: 0; line-height: 1.5;">{{ video.description }}</p>
+
+          <div class="video-card-inner">
+            <!-- 16:9 Aspect Ratio Container -->
+            <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; cursor: pointer;" onclick="playVideo(this, '{{ video.youtube_id }}')">
+              <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('https://img.youtube.com/vi/{{ video.youtube_id }}/maxresdefault.jpg') center/cover; opacity: 0.85; transition: opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'"></div>
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 56px; background: rgba(220, 38, 38, 0.9); border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5); pointer-events: none;">
+                 <svg width="40" height="40" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+            </div>
+            
+            <div class="video-info">
+              <h3 style="margin: 0 0 1rem 0; font-size: 1.75rem; color: var(--text-color); line-height: 1.3;">{{ video.title }}</h3>
+              <p style="font-size: 1.15rem; color: var(--text-muted); margin: 0; line-height: 1.6;">{{ video.description }}</p>
+            </div>
           </div>
         </div>
       {% endfor %}
-    </div>
-  </section>
-{% endfor %}
-</div>
+    {% endfor %}
 
-<div id="no-results" class="no-results">
-  <p style="margin:0;">No videos found matching your criteria.</p>
-  <button onclick="document.getElementById('searchInput').value=''; filterGallery('all'); searchGallery();" style="margin-top: 1rem; padding: 0.5rem 1.5rem; background: var(--primary-color); color: white; border: none; border-radius: 20px; cursor: pointer;">Clear Filters</button>
+    <div id="no-results" class="no-results">
+      <p style="margin:0;">No videos found matching your criteria.</p>
+      <button onclick="document.getElementById('searchInput').value=''; filterGallery('all'); searchGallery();" style="margin-top: 1rem; padding: 0.5rem 1.5rem; background: var(--primary-color); color: white; border: none; border-radius: 20px; cursor: pointer;">Clear Filters</button>
+    </div>
+  </div>
+
+  <!-- Right Side: Navigation Minimap -->
+  <div class="minimap-container">
+    {% for category in site.data.gallery %}
+      {% assign cat_id = category.system_type | slugify %}
+      <div class="minimap-category" data-category="{{ cat_id }}">
+        <div class="minimap-cat-label">{{ category.system_type | truncatewords: 2, "" }}</div>
+        {% for video in category.videos %}
+           <a href="#{{ cat_id }}-{{ forloop.index }}" class="minimap-dot" data-target="{{ cat_id }}-{{ forloop.index }}">
+             <span class="minimap-tooltip">{{ video.title }}</span>
+           </a>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
 </div>
 
 <script>
-  // Replace thumbnail with actual YouTube iframe on click
   function playVideo(container, videoId) {
     const iframeHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" 
                                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
@@ -175,12 +321,12 @@ title: EyeCue Video Gallery
     container.innerHTML = iframeHTML;
   }
 
+  // Filter and Search Logic
   let currentCategory = 'all';
 
   function filterGallery(categoryId) {
     currentCategory = categoryId;
     
-    // Update active button state
     document.querySelectorAll('.filter-btn').forEach(btn => {
       if (btn.dataset.filter === categoryId) {
         btn.classList.add('active');
@@ -198,32 +344,44 @@ title: EyeCue Video Gallery
 
   function applyFilters() {
     const searchQuery = document.getElementById('searchInput').value.toLowerCase();
-    const sections = document.querySelectorAll('.system-section');
+    const cards = document.querySelectorAll('.feed-card');
     let totalVisibleVideos = 0;
 
-    sections.forEach(section => {
-      const categoryMatch = currentCategory === 'all' || section.dataset.category === currentCategory;
-      const videos = section.querySelectorAll('.video-card');
-      let visibleVideosInSection = 0;
+    cards.forEach(card => {
+      const categoryMatch = currentCategory === 'all' || card.dataset.category === currentCategory;
+      const titleMatch = card.dataset.title.includes(searchQuery);
+      const descMatch = card.dataset.desc.includes(searchQuery);
+      
+      if (categoryMatch && (searchQuery === '' || titleMatch || descMatch)) {
+        card.style.display = 'flex';
+        totalVisibleVideos++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
 
-      videos.forEach(video => {
-        const titleMatch = video.dataset.title.includes(searchQuery);
-        const descMatch = video.dataset.desc.includes(searchQuery);
-        
-        if (categoryMatch && (searchQuery === '' || titleMatch || descMatch)) {
-          video.style.display = 'flex';
-          visibleVideosInSection++;
-          totalVisibleVideos++;
+    // Update minimap visibility to match
+    const mapCats = document.querySelectorAll('.minimap-category');
+    mapCats.forEach(cat => {
+      const isCatMatch = currentCategory === 'all' || cat.dataset.category === currentCategory;
+      let catHasVisibleDots = false;
+
+      const dots = cat.querySelectorAll('.minimap-dot');
+      dots.forEach(dot => {
+        const targetId = dot.dataset.target;
+        const targetCard = document.getElementById(targetId);
+        if(targetCard && targetCard.style.display !== 'none') {
+            dot.style.display = 'block';
+            catHasVisibleDots = true;
         } else {
-          video.style.display = 'none';
+            dot.style.display = 'none';
         }
       });
 
-      // Show/hide entire section based on whether it has visible videos and matches category
-      if (visibleVideosInSection > 0 && categoryMatch) {
-         section.style.display = 'block';
+      if (catHasVisibleDots && isCatMatch) {
+         cat.style.display = 'flex';
       } else {
-         section.style.display = 'none';
+         cat.style.display = 'none';
       }
     });
 
@@ -235,4 +393,34 @@ title: EyeCue Video Gallery
       noResultsEl.style.display = 'none';
     }
   }
+
+  // Highlight the active minimap dot based on scroll position using Intersection Observer
+  document.addEventListener("DOMContentLoaded", function() {
+    const cards = document.querySelectorAll('.feed-card');
+    const mapLinks = document.querySelectorAll('.minimap-dot');
+    
+    // Configure observer to trigger when a card crosses the middle of the viewport
+    const observerOptions = {
+      root: null,
+      rootMargin: '-30% 0px -50% 0px', 
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          // Update active states on minimap
+          mapLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('data-target') === id) {
+              link.classList.add('active');
+            }
+          });
+        }
+      });
+    }, observerOptions);
+
+    cards.forEach(card => observer.observe(card));
+  });
 </script>
