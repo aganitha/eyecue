@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,58 +17,82 @@
 
     main {
       padding: 3rem 2rem;
-      max-width: 900px; /* narrowed down since it looks better for single column reading */
+      max-width: 900px;
+      /* narrowed down since it looks better for single column reading */
       margin: 0 auto;
       min-height: calc(100vh - 160px);
     }
+
     .global-footer {
-      border-top: 1px solid rgba(255,255,255,0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
+
     /* Typography for standard markdown content */
-    h1, h2, h3 { color: #ffffff; margin-top: 0; }
-    h2 { border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 0.5rem; margin-top: 2rem; }
-    a { color: #8bb4f7; }
-    a:hover { color: #ffffff; }
-    blockquote {
-      border-left: 4px solid rgba(255,255,255,0.2);
-      padding-left: 1rem;
-      margin-left: 0;
-      color: rgba(255,255,255,0.7);
-      font-style: italic;
+    h1,
+    h2,
+    h3 {
+      color: #ffffff;
+      margin-top: 0;
     }
-    
-    /* Content wrapper for standard pages like About and Contact */
-    .content-box {
-      background: rgba(255,255,255,0.06);
-      padding: 2.5rem;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.12);
+
+    h2 {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding-bottom: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    a {
+      color: #8bb4f7;
+    }
+
+    a:hover {
       color: #ffffff;
     }
+
+    blockquote {
+      border-left: 4px solid rgba(255, 255, 255, 0.2);
+      padding-left: 1rem;
+      margin-left: 0;
+      color: rgba(255, 255, 255, 0.7);
+      font-style: italic;
+    }
+
+    /* Content wrapper for standard pages like About and Contact */
+    .content-box {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2.5rem;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+
     .content-box p {
-      color: rgba(255,255,255,0.85);
+      color: rgba(255, 255, 255, 0.85);
     }
   </style>
 </head>
+
 <body>
   <header class="global-header">
     <a href="https://aganitha.ai/" class="logo-pill" target="_blank">
       <img src="{{ site.logo }}" alt="Aganitha.ai Logo">
     </a>
     <nav>
-      <a href="{{ '/' | relative_url }}" {% if page.url == '/' or page.url == '/index.html' %}class="active"{% endif %}>Gallery</a>
-      <a href="{{ '/about/' | relative_url }}" {% if page.url == '/about/' %}class="active"{% endif %}>About EyeCue</a>
-      <a href="{{ '/contact/' | relative_url }}" {% if page.url == '/contact/' %}class="active"{% endif %}>Contact Us</a>
+      <a href="{{ '/' | relative_url }}" {% if page.url=='/' or page.url=='/index.html' %}class="active" {% endif
+        %}>Gallery</a>
+      <a href="{{ '/about/' | relative_url }}" {% if page.url=='/about/' %}class="active" {% endif %}>About</a>
+      <a href="{{ '/contact/' | relative_url }}" {% if page.url=='/contact/' %}class="active" {% endif %}>Contact</a>
     </nav>
   </header>
-  
+
   <main>
     {{ content }}
   </main>
 
   <footer class="global-footer">
-    &copy; {{ site.time | date: '%Y' }} <a href="https://aganitha.ai/" target="_blank">Aganitha AI</a>. All rights reserved.<br>
-    Powered by EyeCue.
+    &copy; {{ site.time | date: '%Y' }} <a href="https://www.aganitha.ai/" target="_blank">Aganitha AI</a>. All rights
+    reserved.<br>
   </footer>
 </body>
+
 </html>

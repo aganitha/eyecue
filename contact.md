@@ -22,10 +22,10 @@ The EyeCue AI Agent automates interpretation of MD trajectories at expert level,
 
 ## Get in Touch
 
-To procure a license to EyeCue, or if you have any questions regarding capabilities and deployments:
+To procure a license to EyeCue and other agents in [Igniva](https://www.aganitha.ai/products/igniva/) suite of agents for R&D, or if you have any questions regarding capabilities and deployments:
 
 *   E-mail to [crmteam@aganitha.ai](mailto:crmteam@aganitha.ai), OR
-*   Use the [contact us form](https://www.aganitha.ai/company/contact/)
+*   Use the [contact us form](https://www.aganitha.ai/company/contact/).
 
 Please include your institutional affiliation, intended use case, and any specific target milestones so our team can immediately guide you towards the right licensing structure.
 
