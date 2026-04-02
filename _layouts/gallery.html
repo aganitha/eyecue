@@ -4,24 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>{{ page.title | default: site.title }}</title>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
   <style>
-    :root {
-      --primary-color: #0b3d91;
-      --primary-light: #1a52b8;
-      --text-color: #333333;
-      --text-muted: #666666;
-      --border-color: #e2e8f0;
-    }
-    *, *::before, *::after { box-sizing: border-box; }
     html, body {
-      margin: 0;
       padding: 0;
       height: 100%;
       overflow: hidden;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: #000;
       color: #fff;
-      -webkit-font-smoothing: antialiased;
     }
   </style>
 </head>

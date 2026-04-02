@@ -4,25 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ page.title | default: site.title }}</title>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
   <style>
-    :root {
-      /* Matching Aganitha.ai corporate colors implicitly based on typical tech-corporate palettes */
-      --primary-color: #0b3d91; /* A deep corporate blue */
-      --secondary-color: #f7f9fc;
-      --text-color: #333333;
-      --text-muted: #666666;
-      --border-color: #e2e8f0;
-    }
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      margin: 0;
-      color: var(--text-color);
-      background-color: var(--secondary-color);
+      color: #ffffff;
+      background: linear-gradient(160deg, #05081a 0%, #0b3d91 100%);
+      background-attachment: fixed;
       line-height: 1.6;
     }
     header {
-      background-color: #ffffff;
-      border-bottom: 1px solid var(--border-color);
+      background-color: rgba(5, 8, 26, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
       padding: 1rem 2rem;
       display: flex;
       flex-wrap: wrap;
@@ -32,66 +26,65 @@
       top: 0;
       z-index: 1000;
     }
-    header img.logo {
-      height: 40px;
-      display: block;
-    }
+
     nav {
       display: flex;
       gap: 1.5rem;
     }
     nav a {
       text-decoration: none;
-      color: var(--text-color);
-      font-weight: 500;
+      color: rgba(255,255,255,0.7);
+      font-weight: 600;
       font-size: 0.95rem;
       transition: color 0.2s;
     }
     nav a:hover, nav a.active {
-      color: var(--primary-color);
+      color: #ffffff;
     }
     main {
       padding: 3rem 2rem;
-      max-width: 1200px;
+      max-width: 900px; /* narrowed down since it looks better for single column reading */
       margin: 0 auto;
       min-height: calc(100vh - 160px);
     }
-    footer {
-      text-align: center;
-      padding: 2rem;
-      background-color: #ffffff;
-      border-top: 1px solid var(--border-color);
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-    footer a {
-      color: var(--primary-color);
-      text-decoration: none;
+    .global-footer {
+      border-top: 1px solid rgba(255,255,255,0.1);
     }
     /* Typography for standard markdown content */
-    h1 { color: var(--primary-color); margin-top: 0; }
-    h2 { border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-top: 2rem; }
-    a { color: var(--primary-color); }
+    h1, h2, h3 { color: #ffffff; margin-top: 0; }
+    h2 { border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 0.5rem; margin-top: 2rem; }
+    a { color: #8bb4f7; }
+    a:hover { color: #ffffff; }
+    blockquote {
+      border-left: 4px solid rgba(255,255,255,0.2);
+      padding-left: 1rem;
+      margin-left: 0;
+      color: rgba(255,255,255,0.7);
+      font-style: italic;
+    }
     
     /* Content wrapper for standard pages like About and Contact */
     .content-box {
-      background: #ffffff;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      border: 1px solid var(--border-color);
+      background: rgba(255,255,255,0.06);
+      padding: 2.5rem;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #ffffff;
+    }
+    .content-box p {
+      color: rgba(255,255,255,0.85);
     }
   </style>
 </head>
 <body>
   <header>
-    <a href="{{ site.baseurl }}/" class="logo-link">
-      <img src="{{ site.logo }}" alt="Aganitha.ai Logo" class="logo">
+    <a href="{{ '/' | relative_url }}" class="logo-pill">
+      <img src="{{ site.logo }}" alt="Aganitha.ai Logo">
     </a>
     <nav>
-      <a href="{{ site.baseurl }}/">Gallery</a>
-      <a href="{{ site.baseurl }}/about/">About EyeCue</a>
-      <a href="{{ site.baseurl }}/contact/">Contact Us</a>
+      <a href="{{ '/' | relative_url }}">Gallery</a>
+      <a href="{{ '/about/' | relative_url }}">About EyeCue</a>
+      <a href="{{ '/contact/' | relative_url }}">Contact Us</a>
     </nav>
   </header>
   
@@ -99,7 +92,7 @@
     {{ content }}
   </main>
 
-  <footer>
+  <footer class="global-footer">
     &copy; {{ site.time | date: '%Y' }} <a href="https://www.aganitha.ai/" target="_blank">Aganitha AI</a>. All rights reserved.<br>
     Powered by EyeCue.
   </footer>
