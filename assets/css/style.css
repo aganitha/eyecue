@@ -33,8 +33,10 @@ body {
   background-color: #f8f9fa;
 }
 .logo-pill img {
-  height: 28px;
+  height: 28px !important;
+  width: auto !important;
   display: block;
+  max-width: 100%;
 }
 
 /* Common Header */
@@ -45,6 +47,8 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 2.5rem;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 .global-header nav {
   display: flex;
