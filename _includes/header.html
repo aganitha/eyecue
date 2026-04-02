@@ -2,6 +2,14 @@
   <a href="https://aganitha.ai/" class="logo-pill" target="_blank">
     <img src="{{ site.logo }}" alt="Aganitha AI Logo">
   </a>
+  
+  <input type="checkbox" id="menu-toggle" class="menu-toggle">
+  <label for="menu-toggle" class="menu-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </label>
+
   <nav>
     <a href="{{ '/' | relative_url }}" {% if page.url == '/' or page.url == '/index.html' %}class="active"{% endif %}>Gallery</a>
     <a href="{{ '/about/' | relative_url }}" {% if page.url contains '/about/' %}class="active"{% endif %}>About</a>

@@ -91,6 +91,99 @@ body {
   border-radius: 2px;
 }
 
+/* ── Responsive Mobile Menu ── */
+.menu-toggle {
+  display: none;
+}
+
+.menu-icon {
+  display: none;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  z-index: 1001;
+  padding: 0.5rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  transition: background 0.3s;
+}
+
+.menu-icon:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.menu-icon span {
+  width: 24px;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@media (max-width: 768px) {
+  .global-header {
+    padding: 1.2rem 1.5rem;
+    position: relative;
+  }
+  
+  .menu-icon {
+    display: flex;
+  }
+
+  .global-header nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 300px;
+    height: 100vh;
+    background: rgba(5, 8, 26, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    z-index: 1000;
+    box-shadow: -15px 0 35px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .global-header nav a {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .global-header nav a.active::after {
+    bottom: -8px;
+    height: 3px;
+  }
+
+  .menu-toggle:checked ~ nav {
+    right: 0;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .menu-toggle:checked ~ .menu-icon span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 5px);
+  }
+  .menu-toggle:checked ~ .menu-icon span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  .menu-toggle:checked ~ .menu-icon span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -5px);
+  }
+
+  /* When menu is open, prevent scrolling */
+  body:has(#menu-toggle:checked) {
+    overflow: hidden;
+  }
+}
+
 /* Common Footer */
 .global-footer {
   text-align: center;
