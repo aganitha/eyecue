@@ -782,16 +782,7 @@ title: EyeCue Video Gallery
      SCREEN 1 — CATEGORY SELECT
      ═══════════════════════════════════════════════════════════ -->
 <div id="screen-select" class="screen active">
-  <header class="global-header">
-    <a href="https://aganitha.ai/" class="logo-pill" target="_blank">
-      <img src="{{ site.logo }}" alt="Logo">
-    </a>
-    <nav>
-      <a href="{{ '/' | relative_url }}" class="active">Gallery</a>
-      <a href="{{ '/about/' | relative_url }}">About</a>
-      <a href="{{ '/contact/' | relative_url }}">Contact</a>
-    </nav>
-  </header>
+  {% include header.html %}
 
 
 
@@ -821,10 +812,7 @@ title: EyeCue Video Gallery
     {% endfor %}
   </div>
 
-  <footer class="global-footer" style="padding-bottom: 3rem;">
-    &copy; {{ site.time | date: '%Y' }} <a href="https://aganitha.ai/" target="_blank">Aganitha AI</a>. All rights
-    reserved.<br>
-  </footer>
+  {% include footer.html %}
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════

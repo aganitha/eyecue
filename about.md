@@ -1,7 +1,8 @@
 ---
 layout: default
-title: About
+title: About EyeCue
 permalink: /about/
+toc: true
 ---
 
 <div class="content-box" markdown="1">

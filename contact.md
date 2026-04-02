@@ -2,6 +2,7 @@
 layout: default
 title: Contact Us
 permalink: /contact/
+toc: true
 ---
 
 <div class="content-box" markdown="1">

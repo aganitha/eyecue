@@ -3,9 +3,12 @@
 :root {
   --primary-color: #0b3d91;
   --primary-light: #1a52b8;
-  --text-color: #333333;
-  --text-muted: #666666;
-  --border-color: #e2e8f0;
+  --accent-blue: #8bb4f7;
+  --text-color: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.7);
+  --border-color: rgba(255, 255, 255, 0.12);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.12);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -14,26 +17,32 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   margin: 0;
   -webkit-font-smoothing: antialiased;
+  color: var(--text-color);
+  background: linear-gradient(160deg, #05081a 0%, #0b3d91 100%);
+  background-attachment: fixed;
+  line-height: 1.6;
+  min-height: 100vh;
 }
 
 /* Common Pill Logo Container */
 .logo-pill {
   background: white;
-  padding: 0.4rem 1.2rem;
+  padding: 0.45rem 1.25rem;
   border-radius: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.25);
   text-decoration: none;
-  transition: transform 0.2s, background-color 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .logo-pill:hover {
-  transform: translateY(-2px);
-  background-color: #f8f9fa;
+  transform: translateY(-2px) scale(1.02);
+  background-color: #ffffff;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.3);
 }
 .logo-pill img {
-  height: 28px !important;
+  height: 30px !important;
   width: auto !important;
   display: block;
   max-width: 100%;
@@ -46,40 +55,237 @@ body {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  padding: 1.25rem 2.5rem;
+  padding: 1.5rem 2.5rem;
+  padding-top: calc(1.5rem + env(safe-area-inset-top, 0px));
   flex-shrink: 0;
   box-sizing: border-box;
 }
 .global-header nav {
   display: flex;
-  gap: 1.5rem;
+  gap: 2rem;
   align-items: center;
 }
 .global-header nav a {
   text-decoration: none;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255,255,255,0.65);
   font-weight: 600;
   font-size: 0.95rem;
-  transition: color 0.2s;
+  transition: all 0.2s;
+  letter-spacing: 0.02em;
 }
 .global-header nav a:hover, .global-header nav a.active {
   color: #ffffff;
+  text-shadow: 0 0 15px rgba(255,255,255,0.3);
+}
+.global-header nav a.active {
+  position: relative;
+}
+.global-header nav a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 2px;
 }
 
 /* Common Footer */
 .global-footer {
   text-align: center;
-  font-size: 0.85rem;
-  color: rgba(255,255,255,0.6);
-  padding-top: 1.5rem;
-  padding-bottom: 2rem;
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.5);
+  padding: 3.5rem 2.5rem 2.5rem;
   width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 .global-footer a {
-  color: white;
+  color: rgba(255,255,255,0.8);
   text-decoration: none;
   font-weight: 600;
+  transition: color 0.2s;
 }
 .global-footer a:hover {
+  color: #ffffff;
   text-decoration: underline;
+}
+
+/* ── Content Box (About/Contact Pages) ── */
+.content-box {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 3rem;
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  margin-top: 3rem;
+  color: #ffffff;
+  position: relative;
+}
+
+.content-box h1, .content-box h2, .content-box h3 {
+  color: #ffffff;
+  margin-top: 0;
+  scroll-margin-top: 7rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.content-box h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.content-box h2 {
+  font-size: 1.75rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.75rem;
+  margin-top: 3.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.content-box h3 {
+  font-size: 1.25rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.content-box p {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1.05rem;
+  line-height: 1.75;
+  margin-bottom: 1.5rem;
+}
+
+.content-box a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.content-box a:hover {
+  color: #ffffff;
+  border-bottom-color: rgba(255,255,255,0.4);
+}
+
+.content-box blockquote {
+  border-left: 4px solid var(--accent-blue);
+  background: rgba(139, 180, 247, 0.08);
+  padding: 1.5rem 2rem;
+  margin: 2rem 0;
+  border-radius: 0 12px 12px 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-style: italic;
+  font-size: 1.1rem;
+}
+
+.content-box ul, .content-box ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.content-box li {
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* ── Table of Contents & Page Layout ── */
+.main-wrapper {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 4rem;
+  padding: 0 2rem;
+  width: 100%;
+}
+
+main {
+  flex: 1;
+  min-width: 0;
+  padding-bottom: 5rem;
+}
+
+.toc-sidebar {
+  width: 250px;
+  flex-shrink: 0;
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .toc-sidebar {
+    display: block;
+  }
+}
+
+.toc-sticky {
+  position: sticky;
+  top: 7rem;
+  padding-top: 4.5rem;
+}
+
+.toc-sticky h4 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 1.25rem;
+  font-weight: 800;
+}
+
+#toc {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+#toc li { margin: 0; }
+
+#toc a {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: block;
+  line-height: 1.5;
+  border-left: 2px solid transparent;
+  padding-left: 1rem;
+}
+
+#toc a:hover {
+  color: var(--accent-blue);
+  border-left-color: rgba(139, 180, 247, 0.3);
+  padding-left: 1.25rem;
+}
+
+#toc a.active {
+  color: #ffffff;
+  font-weight: 700;
+  border-left-color: var(--accent-blue);
+  padding-left: 1.25rem;
+}
+
+.toc-h2 {
+  padding-left: 1.5rem !important;
+}
+
+.toc-h3 {
+  padding-left: 2.25rem !important;
+  font-size: 0.85rem !important;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.content-box {
+  animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }

@@ -8,91 +8,86 @@
   <link rel="icon" type="image/svg+xml" href="{{ site.favicon }}">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
   <style>
-    body {
-      color: #ffffff;
-      background: linear-gradient(160deg, #05081a 0%, #0b3d91 100%);
-      background-attachment: fixed;
-      line-height: 1.6;
-    }
-
+    /* Layout specific tweaks */
     main {
-      padding: 3rem 2rem;
-      max-width: 900px;
-      /* narrowed down since it looks better for single column reading */
-      margin: 0 auto;
-      min-height: calc(100vh - 160px);
-    }
-
-    .global-footer {
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    /* Typography for standard markdown content */
-    h1,
-    h2,
-    h3 {
-      color: #ffffff;
-      margin-top: 0;
-    }
-
-    h2 {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-      padding-bottom: 0.5rem;
-      margin-top: 2rem;
-    }
-
-    a {
-      color: #8bb4f7;
-    }
-
-    a:hover {
-      color: #ffffff;
-    }
-
-    blockquote {
-      border-left: 4px solid rgba(255, 255, 255, 0.2);
-      padding-left: 1rem;
-      margin-left: 0;
-      color: rgba(255, 255, 255, 0.7);
-      font-style: italic;
-    }
-
-    /* Content wrapper for standard pages like About and Contact */
-    .content-box {
-      background: rgba(255, 255, 255, 0.06);
-      padding: 2.5rem;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: #ffffff;
-    }
-
-    .content-box p {
-      color: rgba(255, 255, 255, 0.85);
+      min-height: calc(100vh - 200px);
     }
   </style>
 </head>
 
 <body>
-  <header class="global-header">
-    <a href="https://aganitha.ai/" class="logo-pill" target="_blank">
-      <img src="{{ site.logo }}" alt="Aganitha.ai Logo">
-    </a>
-    <nav>
-      <a href="{{ '/' | relative_url }}" {% if page.url=='/' or page.url=='/index.html' %}class="active" {% endif
-        %}>Gallery</a>
-      <a href="{{ '/about/' | relative_url }}" {% if page.url=='/about/' %}class="active" {% endif %}>About</a>
-      <a href="{{ '/contact/' | relative_url }}" {% if page.url=='/contact/' %}class="active" {% endif %}>Contact</a>
-    </nav>
-  </header>
+  {% include header.html %}
 
-  <main>
-    {{ content }}
-  </main>
+  <div class="main-wrapper">
+    <main>
+      {{ content }}
+    </main>
 
-  <footer class="global-footer">
-    &copy; {{ site.time | date: '%Y' }} <a href="https://www.aganitha.ai/" target="_blank">Aganitha AI</a>. All rights
-    reserved.<br>
-  </footer>
+    {% if page.toc %}
+    <aside class="toc-sidebar">
+      <div class="toc-sticky">
+        <h4>On this page</h4>
+        <ul id="toc"></ul>
+      </div>
+    </aside>
+    {% endif %}
+  </div>
+
+  {% include footer.html %}
+
+  {% if page.toc %}
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.querySelector('.content-box');
+      const toc = document.getElementById('toc');
+      if (!container || !toc) return;
+
+      const headings = container.querySelectorAll('h1, h2, h3');
+      headings.forEach((heading, index) => {
+        if (!heading.id) {
+          heading.id = heading.textContent.toLowerCase()
+            .trim()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/[\s_-]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+          
+          if (document.getElementById(heading.id) && document.getElementById(heading.id) !== heading) {
+            heading.id += '-' + index;
+          }
+        }
+
+        const a = document.createElement('a');
+        a.href = '#' + heading.id;
+        a.textContent = heading.textContent;
+        
+        // Add level classes for indentation
+        if (heading.tagName === 'H2') a.classList.add('toc-h2');
+        if (heading.tagName === 'H3') a.classList.add('toc-h3');
+
+        const li = document.createElement('li');
+        li.appendChild(a);
+        toc.appendChild(li);
+      });
+
+      // Intersection Observer for active state
+      const observer = new IntersectionObserver((entries) => {
+        // Find the top-most intersecting header
+        const intersecting = entries.filter(e => e.isIntersecting);
+        if (intersecting.length > 0) {
+          // Sort by visibility ratio if needed, or just pick the first one from top
+          const activeId = intersecting[0].target.id;
+          const navLink = toc.querySelector(`a[href="#${activeId}"]`);
+          if (navLink) {
+            toc.querySelectorAll('a').forEach(link => link.classList.remove('active'));
+            navLink.classList.add('active');
+          }
+        }
+      }, { rootMargin: '-10% 0px -70% 0px' });
+
+      headings.forEach(h => observer.observe(h));
+    });
+  </script>
+  {% endif %}
 </body>
 
 </html>

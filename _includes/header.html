@@ -1,0 +1,10 @@
+<header class="global-header">
+  <a href="https://aganitha.ai/" class="logo-pill" target="_blank">
+    <img src="{{ site.logo }}" alt="Aganitha AI Logo">
+  </a>
+  <nav>
+    <a href="{{ '/' | relative_url }}" {% if page.url == '/' or page.url == '/index.html' %}class="active"{% endif %}>Gallery</a>
+    <a href="{{ '/about/' | relative_url }}" {% if page.url contains '/about/' %}class="active"{% endif %}>About</a>
+    <a href="{{ '/contact/' | relative_url }}" {% if page.url contains '/contact/' %}class="active"{% endif %}>Contact</a>
+  </nav>
+</header>
