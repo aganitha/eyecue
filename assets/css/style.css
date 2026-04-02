@@ -26,10 +26,40 @@ body {
   justify-content: center;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   text-decoration: none;
+  transition: transform 0.2s, background-color 0.2s;
+}
+.logo-pill:hover {
+  transform: translateY(-2px);
+  background-color: #f8f9fa;
 }
 .logo-pill img {
   height: 28px;
   display: block;
+}
+
+/* Common Header */
+.global-header {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 2.5rem;
+}
+.global-header nav {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+.global-header nav a {
+  text-decoration: none;
+  color: rgba(255,255,255,0.7);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+.global-header nav a:hover, .global-header nav a.active {
+  color: #ffffff;
 }
 
 /* Common Footer */

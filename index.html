@@ -63,18 +63,12 @@ title: EyeCue Video Gallery
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 2rem 1.5rem;
+  padding: 0;
   overflow-y: auto;
-  gap: 2.5rem;
+  gap: 1.5rem;
   position: relative;
 }
-.gallery-logo-pos {
-  position: absolute;
-  top: 1.5rem;
-  left: 1.5rem;
-  z-index: 20;
-}
+
 .select-header { text-align: center; }
 .select-header h1 {
   font-size: clamp(1.8rem, 5vw, 3.2rem);
@@ -587,9 +581,16 @@ title: EyeCue Video Gallery
      SCREEN 1 — CATEGORY SELECT
      ═══════════════════════════════════════════════════════════ -->
 <div id="screen-select" class="screen active">
-  <a href="{{ '/' | relative_url }}" class="logo-pill gallery-logo-pos">
-    <img src="{{ site.logo }}" alt="Logo">
-  </a>
+  <header class="global-header">
+    <a href="{{ '/' | relative_url }}" class="logo-pill">
+      <img src="{{ site.logo }}" alt="Logo">
+    </a>
+    <nav>
+      <a href="{{ '/' | relative_url }}" class="active">Gallery</a>
+      <a href="{{ '/about/' | relative_url }}">About EyeCue</a>
+      <a href="{{ '/contact/' | relative_url }}">Contact Us</a>
+    </nav>
+  </header>
   
   <div style="margin-top: auto;"></div>
 

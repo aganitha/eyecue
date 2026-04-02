@@ -12,35 +12,7 @@
       background-attachment: fixed;
       line-height: 1.6;
     }
-    header {
-      background-color: rgba(5, 8, 26, 0.88);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding: 1rem 2rem;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
 
-    nav {
-      display: flex;
-      gap: 1.5rem;
-    }
-    nav a {
-      text-decoration: none;
-      color: rgba(255,255,255,0.7);
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: color 0.2s;
-    }
-    nav a:hover, nav a.active {
-      color: #ffffff;
-    }
     main {
       padding: 3rem 2rem;
       max-width: 900px; /* narrowed down since it looks better for single column reading */
@@ -77,14 +49,14 @@
   </style>
 </head>
 <body>
-  <header>
+  <header class="global-header">
     <a href="{{ '/' | relative_url }}" class="logo-pill">
       <img src="{{ site.logo }}" alt="Aganitha.ai Logo">
     </a>
     <nav>
-      <a href="{{ '/' | relative_url }}">Gallery</a>
-      <a href="{{ '/about/' | relative_url }}">About EyeCue</a>
-      <a href="{{ '/contact/' | relative_url }}">Contact Us</a>
+      <a href="{{ '/' | relative_url }}" {% if page.url == '/' or page.url == '/index.html' %}class="active"{% endif %}>Gallery</a>
+      <a href="{{ '/about/' | relative_url }}" {% if page.url == '/about/' %}class="active"{% endif %}>About EyeCue</a>
+      <a href="{{ '/contact/' | relative_url }}" {% if page.url == '/contact/' %}class="active"{% endif %}>Contact Us</a>
     </nav>
   </header>
   
