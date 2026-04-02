@@ -1,530 +1,1267 @@
 ---
-layout: default
+layout: gallery
 title: EyeCue Video Gallery
 ---
 
 <style>
-  html {
-    scroll-behavior: smooth;
-    scroll-snap-type: y proximity;
-  }
-  
-  /* Hero Section */
-  .hero-section {
-    scroll-snap-align: start;
-    min-height: calc(100vh - 80px); /* Fill the screen */
-    display: flex;
-    align-items: center; /* Center vertically */
-    justify-content: space-between;
-    gap: 4rem;
-    scroll-margin-top: 80px;
-    padding: 4rem 0; /* Breathing room */
-    box-sizing: border-box;
-  }
+/* ── VIDEO LOADING OVERLAY ────────────────────────────────── */
+.video-loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1; /* Above thumbnail, below iframe */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.video-loading-overlay.visible { opacity: 1; pointer-events: all; }
+.video-loading-overlay .spinner {
+  border: 4px solid rgba(255,255,255,0.2);
+  border-top: 4px solid white;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+}
+.video-loading-overlay .message {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
-  .hero-content {
-    flex: 1;
-    max-width: 600px;
-  }
+/* ── SCREEN SYSTEM ─────────────────────────────────────────── */
+.screen {
+  position: fixed;
+  inset: 0;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(16px);
+}
+.screen.active {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+  z-index: 10;
+}
 
-  .hero-controls {
-    flex: 1;
-    max-width: 500px;
-    background: #fff;
-    border-radius: 16px;
-    border: 1px solid var(--border-color);
-    padding: 2.5rem;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.06);
-  }
+/* ── SELECT SCREEN ─────────────────────────────────────────── */
+#screen-select {
+  background: linear-gradient(160deg, #05081a 0%, #0b3d91 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  overflow-y: auto;
+  gap: 2.5rem;
+}
+.select-header { text-align: center; }
+.select-header h1 {
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  color: white;
+  margin: 0 0 0.6rem;
+  letter-spacing: -1px;
+  font-weight: 800;
+}
+.select-tagline {
+  color: rgba(255,255,255,0.7);
+  font-size: clamp(0.9rem, 2.2vw, 1.05rem);
+  line-height: 1.65;
+  margin: 0.75rem auto 0;
+  max-width: 560px;
+}
+.select-prompt {
+  color: rgba(255,255,255,0.38);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 1.5rem 0 0;
+}
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 860px;
+}
+.cat-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  padding: 1.75rem 1.25rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s, border-color 0.2s;
+  text-align: center;
+  color: white;
+}
+.cat-card:hover {
+  background: rgba(255,255,255,0.14);
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,0.35);
+}
+.cat-card:active { transform: translateY(-1px); }
+.cat-card .cat-icon { font-size: 2.2rem; margin-bottom: 0.7rem; display: block; }
+.cat-card .cat-name { font-size: 0.95rem; font-weight: 700; line-height: 1.35; }
+.cat-card .cat-count { font-size: 0.78rem; color: rgba(255,255,255,0.45); margin-top: 0.3rem; }
+.cat-card.all-card {
+  border-color: rgba(255,255,255,0.25);
+  background: rgba(11,61,145,0.4);
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.25rem 2rem;
+}
+.cat-card.all-card .cat-icon { font-size: 1.5rem; margin: 0; }
+.cat-card.all-card .cat-name { font-size: 1.05rem; }
 
-  @media (max-width: 900px) {
-    .hero-section {
-      flex-direction: column;
-      min-height: auto;
-      gap: 3rem;
-      padding: 3rem 0;
-    }
-    .hero-content, .hero-controls {
-      max-width: 100%;
-    }
-  }
+/* ── FEED SCREEN ───────────────────────────────────────────── */
+#screen-feed {
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+  background: #000;
+  scrollbar-width: none;
+}
+#screen-feed::-webkit-scrollbar { display: none; }
 
-  /* Controls (Filters/Search) */
-  .filter-group {
-    display: flex;
-    gap: 0.6rem;
+.slide {
+  height: 100dvh;
+  scroll-snap-align: start;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.slide-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(24px) brightness(0.25);
+  transform: scale(1.12);
+}
+.slide-video {
+  position: relative;
+  width: 100%;
+  max-width: min(100vw, calc(100dvh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  z-index: 1;
+  background: #000;
+}
+.yt-container {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.yt-container iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.thumbnail-overlay {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+.play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 68px;
+  height: 50px;
+  background: rgba(220,38,38,0.92);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+/* ── AUTOPLAY MUTED OVERLAY ──────────────────────────────── */
+.autoplay-muted-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2; /* Above everything else */
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  text-align: center;
+  padding: 1rem;
+}
+.autoplay-muted-overlay.visible { opacity: 1; pointer-events: all; }
+.autoplay-muted-overlay svg {
+  margin-bottom: 0.5rem;
+  opacity: 0.8;
+}
+
+/* ── COUNTDOWN RING ─────────────────────────────────────────── */
+.countdown-container {
+  position: absolute;
+  inset: 0;
+  display: none; /* shown via JS when slide activates */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: rgba(0,0,0,0.35);
+  cursor: pointer;
+}
+.countdown-ring-wrap {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.countdown-svg {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg); /* start arc from top */
+}
+.countdown-arc-bg {
+  fill: none;
+  stroke: rgba(255,255,255,0.15);
+  stroke-width: 5;
+}
+.countdown-arc {
+  fill: none;
+  stroke: white;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 283; /* 2π × 45 */
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.9s linear;
+}
+.countdown-digit {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: white;
+  line-height: 1;
+  position: relative; /* above svg */
+  z-index: 1;
+}
+.countdown-skip {
+  color: rgba(255,255,255,0.65);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* ── HUD ────────────────────────────────────────────────────── */
+.slide-hud {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: max(env(safe-area-inset-top, 0px), 0.75rem);
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 1rem);
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.hud-top, .hud-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.hud-pill {
+  background: rgba(0,0,0,0.52);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: white;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.4rem 0.85rem;
+  border-radius: 20px;
+  pointer-events: all;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+.hud-pill:hover { background: rgba(0,0,0,0.7); }
+.about-btn {
+  background: rgba(0,0,0,0.52);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: white;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.25);
+  font-size: 1rem;
+  font-weight: 800;
+  pointer-events: all;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.about-btn:hover { background: rgba(0,0,0,0.72); }
+
+/* scroll hint */
+.scroll-hint {
+  position: absolute;
+  bottom: 6dvh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  animation: nudge 2.5s ease-in-out infinite;
+  pointer-events: none;
+  transition: opacity 0.5s;
+}
+.scroll-hint svg { opacity: 0.6; }
+@keyframes nudge {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(6px); }
+}
+
+/* ── AUTO-ADVANCE BAR ───────────────────────────────────────── */
+.advance-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  background: rgba(5,8,26,0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 0.85rem 1.25rem calc(env(safe-area-inset-bottom, 0px) + 0.85rem);
+  display: none; /* shown via JS */
+  align-items: center;
+  gap: 1rem;
+  color: white;
+}
+.advance-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+  flex-shrink: 0;
+}
+.advance-label {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.72);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.advance-next {
+  font-size: 0.94rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.advance-next-title {
+  display: inline-block;
+  max-width: min(44vw, 420px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
+.advance-next strong,
+.advance-label strong {
+  font-weight: 800;
+}
+.advance-track {
+  flex: 1;
+  height: 3px;
+  background: rgba(255,255,255,0.18);
+  border-radius: 2px;
+  overflow: hidden;
+  min-width: 40px;
+}
+.advance-fill {
+  height: 100%;
+  width: 0%;
+  background: white;
+  border-radius: 2px;
+}
+.advance-cancel {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
+  padding: 0.35rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.advance-cancel,
+.advance-next,
+.advance-label { white-space: nowrap; }
+.advance-cancel:hover { background: rgba(255,255,255,0.18); }
+@media (max-width: 720px) {
+  .advance-bar {
     flex-wrap: wrap;
-    align-items: center;
-  }
-  .filter-label {
-    font-weight: 700; 
-    font-size: 0.95rem; 
-    margin-right: 0.2rem;
-    color: var(--text-color);
-  }
-  .filter-btn {
-    padding: 0.5rem 1.2rem; 
-    background: var(--secondary-color); 
-    border: 1px solid var(--border-color); 
-    border-radius: 20px; 
-    color: var(--text-color); 
-    font-size: 0.9rem; 
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: inherit;
-    white-space: nowrap;
-    font-weight: 500;
-  }
-  .filter-btn:hover {
-    background: #e2e8f0;
-  }
-  .filter-btn.active {
-    background: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
-  }
-  .search-box {
-    position: relative; 
-    width: 100%;
-  }
-  .search-box input {
-    width: 100%; 
-    padding: 0.8rem 1.2rem 0.8rem 2.8rem; 
-    border-radius: 8px; 
-    border: 1px solid var(--border-color); 
-    font-size: 1rem; 
-    box-sizing: border-box;
-    font-family: inherit;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .search-box input:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(11, 61, 145, 0.1);
-  }
-  .search-icon {
-    position: absolute; 
-    left: 14px; 
-    top: 50%; 
-    transform: translateY(-50%); 
-    color: #888;
-  }
-
-  /* Gallery Layout */
-  .gallery-layout {
-    display: flex;
-    gap: 2rem;
-    position: relative;
     align-items: flex-start;
   }
-
-  .feed-container {
-    flex-grow: 1;
-    max-width: calc(100% - 60px); /* Leave room for minimap */
-    margin: 0;
-  }
-
-  .feed-card {
-    scroll-snap-align: center;
-    scroll-margin-top: 80px; /* Only needs space for sticky master header now */
-    min-height: calc(100vh - 100px); /* Maximize height for video */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 2rem 0; /* Breathing room */
-    box-sizing: border-box;
-  }
-
-  /* Minimap */
-  .minimap-container {
-    position: sticky;
-    top: 100px;
-    right: 0;
-    width: 40px;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    z-index: 900;
-  }
-
-  @media (max-width: 768px) {
-    .minimap-container {
-      display: none; /* Hide on very small screens */
-    }
-    .feed-container { max-width: 100%; }
-  }
-
-  .minimap-category {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.6rem;
-  }
-
-  .minimap-cat-label {
-    font-size: 0.6rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    letter-spacing: 1px;
-    margin-bottom: 0.4rem;
-  }
-
-  .minimap-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: var(--border-color); 
-    transition: all 0.3s;
-    position: relative;
-    display: block;
-    cursor: pointer;
-  }
-
-  .minimap-dot:hover, .minimap-dot.active {
-    background-color: var(--primary-color);
-    transform: scale(1.6);
-  }
-
-  .minimap-tooltip {
-    position: absolute;
-    right: 25px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.85);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s, transform 0.2s;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  }
-
-  .minimap-dot:hover .minimap-tooltip {
-    opacity: 1;
-    transform: translateY(-50%) translateX(-5px);
-  }
-
-  .video-card-inner {
-    background: white; 
-    border-radius: 16px; 
-    overflow: hidden; 
-    box-shadow: 0 10px 40px rgba(0,0,0,0.08); 
-    border: 1px solid var(--border-color); 
-    display: flex; 
-    flex-direction: column;
+  .advance-copy {
     width: 100%;
-    max-height: 100%; /* Prevent overflowing the viewport if content is huge */
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
-  .video-card-inner:hover {
-    transform: scale(1.01);
+  .advance-track {
+    order: 3;
+    width: 100%;
+    flex-basis: 100%;
   }
-  .video-info {
-    padding: 2rem;
+  .advance-cancel {
+    margin-left: auto;
   }
+  .advance-next-title {
+    max-width: 85vw;
+  }
+}
 
-  .no-results {
-    display: none;
-    text-align: center;
-    padding: 4rem;
-    background: #fff;
-    border-radius: 16px;
-    border: 1px solid var(--border-color);
-    color: var(--text-muted);
-    font-size: 1.1rem;
-    margin-top: 2rem;
-  }
+/* ── ABOUT PANEL ────────────────────────────────────────────── */
+.about-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(0,0,0,0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.about-scrim.open { opacity: 1; pointer-events: all; }
+.about-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 51;
+  background: rgba(8,10,22,0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px 20px 0 0;
+  padding: 0 1.75rem calc(env(safe-area-inset-bottom, 0px) + 2rem);
+  transform: translateY(100%);
+  transition: transform 0.38s cubic-bezier(0.32, 0.72, 0, 1);
+  color: white;
+  max-height: 65dvh;
+  overflow-y: auto;
+}
+.about-panel.open { transform: translateY(0); }
+.panel-handle {
+  width: 36px;
+  height: 4px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 2px;
+  margin: 1rem auto 1.5rem;
+}
+.panel-cat-tag {
+  display: inline-block;
+  background: var(--primary-color);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 0.3rem 0.85rem;
+  border-radius: 20px;
+  margin-bottom: 0.9rem;
+}
+.about-panel h3 {
+  margin: 0 0 0.8rem;
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  line-height: 1.3;
+  font-weight: 700;
+}
+.about-panel p {
+  margin: 0;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.65;
+  font-size: 0.98rem;
+}
+
+/* ── END CARD ──────────────────────────────────────────────── */
+.slide.end-card {
+  background: linear-gradient(160deg, #05081a 0%, #0b3d91 100%);
+  flex-direction: column;
+  gap: 1.75rem;
+  padding: 2rem 1.5rem calc(env(safe-area-inset-bottom, 0px) + 2rem);
+  text-align: center;
+  overflow-y: auto;
+}
+.end-check {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+.end-card h2 { color: white; font-size: clamp(1.4rem,4vw,2rem); margin: 0; font-weight: 800; line-height: 1.2; }
+.end-card > p { color: rgba(255,255,255,0.55); font-size: 1rem; margin: 0; }
+.recap-grid { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; width: 100%; max-width: 480px; }
+.recap-thumb { width: 88px; aspect-ratio: 16/9; background-size: cover; background-position: center; border-radius: 6px; opacity: 0.55; flex-shrink: 0; }
+.recap-thumb.watched { opacity: 1; border: 2px solid white; transform: scale(1.05); }
+.end-actions { display: flex; flex-direction: column; gap: 0.75rem; width: 100%; max-width: 300px; }
+.end-btn {
+  padding: 0.9rem 1.75rem;
+  border-radius: 50px;
+  font-size: 0.98rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  font-family: inherit;
+  width: 100%;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+.end-btn.primary { background: white; color: var(--primary-color); }
+.end-btn.primary:hover { background: #e8effd; }
+.end-btn.secondary { background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.25); }
+.end-btn.secondary:hover { background: rgba(255,255,255,0.15); }
 </style>
 
-<!-- Hero Section -->
-<div class="hero-section" id="hero">
-  <div class="hero-content">
-    <h1 style="font-size: 3.5rem; margin-bottom: 1.5rem; line-height: 1.1; letter-spacing: -1px; color: var(--primary-color);">EyeCue Gallery</h1>
-    <p style="font-size: 1.25rem; color: var(--text-muted); line-height: 1.6;">
-      {{ site.description }}
-    </p>
-    <div style="color: var(--primary-color); font-weight: 600; font-size: 1.1rem; margin-top: 2.5rem; display: flex; align-items: center; gap: 0.5rem; animation: bounce 2s infinite;">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
-      Scroll down to auto-play presentations
-    </div>
+<!-- ═══════════════════════════════════════════════════════════
+     SCREEN 1 — CATEGORY SELECT
+     ═══════════════════════════════════════════════════════════ -->
+<div id="screen-select" class="screen active">
+  <div class="select-header">
+    <h1>EyeCue Gallery</h1>
+    <p class="select-tagline">A gallery of videos generated by EyeCue, a multimodal AI agent for interpreting Molecular Dynamics (MD) trajectories with audio-visual explanations.</p>
+    <p class="select-prompt">Choose a topic to begin</p>
   </div>
-  
-  <div class="hero-controls">
-    <h3 style="margin-top: 0; margin-bottom: 1.5rem; font-size: 1.35rem; color: var(--text-color);">Find a Presentation</h3>
-    
-    <div style="margin-bottom: 2rem;">
-      <div class="search-box">
-        <input type="text" id="searchInput" onkeyup="searchGallery()" placeholder="Search videos by title or keyword...">
-        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+  <div class="category-grid">
+    <div class="cat-card all-card" onclick="startFeed('all')">
+      <span class="cat-icon">▶</span>
+      <div>
+        <div class="cat-name">Watch Everything</div>
+        <div class="cat-count">All presentations</div>
       </div>
     </div>
-    
-    <div>
-      <span class="filter-label" style="display: block; margin-bottom: 1rem;">Filter by Category:</span>
-      <div class="filter-group">
-        <button onclick="filterGallery('all')" class="filter-btn active" data-filter="all">All</button>
-        {% for category in site.data.gallery %}
-          {% assign cat_id = category.system_type | slugify %}
-          <button onclick="filterGallery('{{ cat_id }}')" class="filter-btn" data-filter="{{ cat_id }}">{{ category.system_type }}</button>
-        {% endfor %}
+    {% for category in site.data.gallery %}
+      {% assign cat_id = category.system_type | slugify %}
+      <div class="cat-card" onclick="startFeed('{{ cat_id }}')">
+        <span class="cat-icon">🔬</span>
+        <div class="cat-name">{{ category.system_type }}</div>
+        <div class="cat-count">{{ category.videos | size }} video{% if category.videos.size != 1 %}s{% endif %}</div>
       </div>
-    </div>
+    {% endfor %}
   </div>
 </div>
 
-<style>
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-10px); }
-  60% { transform: translateY(-5px); }
-}
-</style>
+<!-- ═══════════════════════════════════════════════════════════
+     SCREEN 2 — VIDEO FEED
+     ═══════════════════════════════════════════════════════════ -->
+<div id="screen-feed" class="screen hidden">
 
-<div class="gallery-layout">
-  <!-- Left Side: Presentation Feed -->
-  <div class="feed-container">
-    {% for category in site.data.gallery %}
-      {% assign cat_id = category.system_type | slugify %}
-      
-      {% for video in category.videos %}
-        <div class="feed-card" id="{{ cat_id }}-{{ forloop.index }}" data-category="{{ cat_id }}" data-title="{{ video.title | downcase | escape }}" data-desc="{{ video.description | downcase | escape }}">
-          
-          <div style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
-             <div style="display: flex; align-items: center; gap: 1rem;">
-               <span style="background: var(--primary-color); color: white; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
-                 {{ category.system_type }}
-               </span>
-               <span style="color: var(--text-muted); font-size: 0.9rem; font-weight: 500;">
-                 Video {{ forloop.index }} of {{ category.videos.size }}
-               </span>
-             </div>
-             
-             <!-- Auto-play indicator -->
-             <span class="playing-indicator" style="display: none; align-items: center; gap: 0.3rem; color: #DC2626; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; animation: pulse 2s infinite;">
-                <span style="width: 8px; height: 8px; background: #DC2626; border-radius: 50%;"></span> Now Playing
-             </span>
-          </div>
+  {% assign global_index = 0 %}
+  {% for category in site.data.gallery %}
+    {% assign cat_id = category.system_type | slugify %}
+    {% assign cat_size = category.videos | size %}
 
-          <div class="video-card-inner">
-            <!-- 16:9 Aspect Ratio Container class -->
-            <div class="yt-container" data-vid="{{ video.youtube_id }}" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; cursor: pointer;">
-              <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('https://img.youtube.com/vi/{{ video.youtube_id }}/maxresdefault.jpg') center/cover; opacity: 0.85;"></div>
-              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 56px; background: rgba(220, 38, 38, 0.9); border-radius: 16px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5); pointer-events: none;">
-                 <svg width="40" height="40" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-              </div>
+    {% for video in category.videos %}
+      {% assign global_index = global_index | plus: 1 %}
+      {% assign local_index = forloop.index %}
+
+      <div class="slide"
+           id="slide-{{ global_index }}"
+           data-category="{{ cat_id }}"
+           data-cat-label="{{ category.system_type | escape }}"
+           data-title="{{ video.title | escape }}"
+           data-desc="{{ video.description | escape }}"
+           data-vid="{{ video.youtube_id }}"
+           data-global="{{ global_index }}">
+
+        <div class="slide-bg"
+             style="background-image:url('https://img.youtube.com/vi/{{ video.youtube_id }}/hqdefault.jpg')">
+        </div>
+
+        <div class="slide-video">
+          <div class="yt-container" data-vid="{{ video.youtube_id }}">
+            <div class="thumbnail-overlay"
+                 style="background-image:url('https://img.youtube.com/vi/{{ video.youtube_id }}/hqdefault.jpg')">
             </div>
-            
-            <div class="video-info">
-              <h3 style="margin: 0 0 1rem 0; font-size: 1.75rem; color: var(--text-color); line-height: 1.3;">{{ video.title }}</h3>
-              <p style="font-size: 1.15rem; color: var(--text-muted); margin: 0; line-height: 1.6;">{{ video.description }}</p>
+
+            <!-- countdown ring — shown when slide is active, hidden otherwise -->
+            <div class="countdown-container">
+              <div class="countdown-ring-wrap">
+                <svg class="countdown-svg" viewBox="0 0 110 110">
+                  <circle class="countdown-arc-bg" cx="55" cy="55" r="45"/>
+                  <circle class="countdown-arc" cx="55" cy="55" r="45"/>
+                </svg>
+                <span class="countdown-digit">3</span>
+              </div>
+              <div class="countdown-skip">Tap to play now</div>
+            </div>
+
+            <!-- play button — visible on inactive slides -->
+            <div class="play-btn">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+
+            <!-- Autoplay muted overlay — shown if browser blocks autoplay with sound -->
+            <div class="autoplay-muted-overlay" onclick="toggleMute();">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+              <span>Tap to unmute and play</span>
             </div>
           </div>
         </div>
-      {% endfor %}
-    {% endfor %}
 
-    <div id="no-results" class="no-results">
-      <h3 style="margin-top:0; color: var(--text-color);">No videos found</h3>
-      <p>Try adjusting your search query or clearing your filter.</p>
-      <button onclick="document.getElementById('searchInput').value=''; filterGallery('all'); searchGallery();" style="margin-top: 1rem; padding: 0.75rem 2rem; background: var(--primary-color); color: white; border: none; border-radius: 30px; cursor: pointer; font-size: 1rem; font-weight: 600;">Clear All Filters</button>
+        <div class="slide-hud">
+          <div class="hud-top">
+            <button class="hud-pill" onclick="showSelect()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+              Topics
+            </button>
+            <span class="hud-pill" style="cursor:default" data-counter>{{ local_index }} / {{ cat_size }}</span>
+          </div>
+          <div class="hud-bottom">
+            <!-- starts as "audio on" since isMuted defaults to false -->
+            <button class="hud-pill audio-btn" onclick="toggleMute(this)" data-muted="false">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+              Tap to mute
+            </button>
+            <button class="about-btn" onclick="showAbout(this)" title="About this video">i</button>
+          </div>
+        </div>
+
+        {% if global_index == 1 %}
+        <div class="scroll-hint" id="scroll-hint">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 5v14M19 12l-7 7-7-7"/>
+          </svg>
+          Scroll for next
+        </div>
+        {% endif %}
+
+      </div>
+    {% endfor %}
+  {% endfor %}
+
+  <!-- END CARD -->
+  <div class="slide end-card" id="slide-end">
+    <div class="end-check">✓</div>
+    <h2 id="end-title">You've seen everything</h2>
+    <p id="end-subtitle">Ready for the next step?</p>
+    <div id="recap-grid" class="recap-grid"></div>
+    <div class="end-actions">
+      <button class="end-btn primary" onclick="showSelect()">Explore Another Topic</button>
+      <a href="{{ site.baseurl }}/contact/" class="end-btn secondary">Get in Touch</a>
     </div>
   </div>
 
-  <!-- Right Side: Navigation Minimap -->
-  <div class="minimap-container">
-    {% for category in site.data.gallery %}
-      {% assign cat_id = category.system_type | slugify %}
-      <div class="minimap-category" data-category="{{ cat_id }}">
-        <div class="minimap-cat-label">{{ category.system_type | truncatewords: 2, "" }}</div>
-        {% for video in category.videos %}
-           <a href="#{{ cat_id }}-{{ forloop.index }}" class="minimap-dot" data-target="{{ cat_id }}-{{ forloop.index }}">
-             <span class="minimap-tooltip">{{ video.title }}</span>
-           </a>
-        {% endfor %}
-      </div>
-    {% endfor %}
+</div><!-- /screen-feed -->
+
+<!-- Auto-advance bar (fixed, appears when video ends) -->
+<div id="advance-bar" class="advance-bar">
+  <div class="advance-copy">
+    <span id="advance-next-label" class="advance-label">Auto-forwarding in <strong id="advance-num">5</strong>s</span>
+    <span class="advance-next">Up next: <strong id="advance-next-title" class="advance-next-title">Next video</strong></span>
   </div>
+  <div class="advance-track"><div id="advance-fill" class="advance-fill"></div></div>
+  <button class="advance-cancel" onclick="cancelAdvance()">Stay</button>
 </div>
 
-<style>
-@keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.5; }
-  100% { opacity: 1; }
-}
-</style>
+<!-- About bottom sheet -->
+<div class="about-scrim" id="about-scrim" onclick="closeAbout()"></div>
+<div class="about-panel" id="about-panel">
+  <div class="panel-handle"></div>
+  <span class="panel-cat-tag" id="about-cat"></span>
+  <h3 id="about-title-text"></h3>
+  <p id="about-desc-text"></p>
+</div>
 
 <script>
-  function loadAndPlayVideo(container, videoId) {
-    if (container.querySelector('iframe')) return; // Already loaded
-    
-    // Save original thumbnail logic to restore later
-    if (!container.dataset.thumbnailHtml) {
-        container.dataset.thumbnailHtml = container.innerHTML;
-    }
-    
-    // Autoplay requires mute=1 on modern browsers without prior user interaction
-    const iframeHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1" 
-                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen></iframe>`;
-    container.innerHTML = iframeHTML;
+  // ── CONSTANTS ──────────────────────────────────────────────
+  var PREPLAY_SECONDS = 3;    // countdown before video starts
+  var ADVANCE_SECONDS = 5;    // countdown after video ends before auto-scroll
+  var CIRCUMFERENCE   = 283;  // 2π × r=45 ≈ 283
+  var YT_ORIGIN       = encodeURIComponent(window.location.origin); // stable, compute once
+
+  // SVG icons for mute/unmute button — extracted so they're not duplicated inline
+  var SVG_MUTED   = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
+  var SVG_UNMUTED = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>';
+
+  // ── CACHED DOM REFERENCES ───────────────────────────────────
+  // Elements that exist for the lifetime of the page — look them up once
+  var elFeed        = document.getElementById('screen-feed');
+  var elSelect      = document.getElementById('screen-select');
+  var elAdvanceBar  = document.getElementById('advance-bar');
+  var elAdvanceNextLabel = document.getElementById('advance-next-label');
+  var elAdvanceNextTitle = document.getElementById('advance-next-title');
+  var elAdvanceNum  = document.getElementById('advance-num');
+  var elAdvanceFill = document.getElementById('advance-fill');
+  var elAboutPanel  = document.getElementById('about-panel');
+  var elAboutScrim  = document.getElementById('about-scrim');
+  var elScrollHint    = document.getElementById('scroll-hint');
+  var elEndTitle      = document.getElementById('end-title');
+  var elRecapGrid     = document.getElementById('recap-grid');
+  var elAboutCat      = document.getElementById('about-cat');
+  var elAboutTitleTxt = document.getElementById('about-title-text');
+  var elAboutDescTxt  = document.getElementById('about-desc-text');
+
+  // ── STATE ──────────────────────────────────────────────────
+  var isMuted       = false; // default: try unmuted, show overlay if blocked
+  var activeSlide   = null;
+  var feedSlides    = [];
+  var hasScrolled   = false;
+  var advanceTimers = []; // array — holds ALL pending timer IDs
+  var watchedVideos = new Set(); // Stores youtube_id of watched videos
+  var autoplayAllowed = false; // Will be determined on first interaction
+  var youtubeApiReady = false;
+  var youtubeApiLoading = false;
+  var youtubeApiCallbacks = [];
+  var playerMap = new WeakMap();
+
+  // ── YOUTUBE IFRAME API ────────────────────────────────────
+  function flushYouTubeApiCallbacks() {
+    var callbacks = youtubeApiCallbacks.slice();
+    youtubeApiCallbacks = [];
+    callbacks.forEach(function(callback) { callback(); });
   }
 
-  function stopAndUnloadVideo(container) {
-    if (container.dataset.thumbnailHtml && container.querySelector('iframe')) {
-        // Restore thumbnail, effectively destroying the iframe player to pause it and free RAM
-        container.innerHTML = container.dataset.thumbnailHtml;
+  function ensureYouTubeApi(callback) {
+    if (window.YT && typeof window.YT.Player === 'function') {
+      youtubeApiReady = true;
+      callback();
+      return;
     }
+
+    youtubeApiCallbacks.push(callback);
+    if (youtubeApiLoading) return;
+
+    youtubeApiLoading = true;
+    var tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    tag.async = true;
+    tag.onerror = function() {
+      youtubeApiLoading = false;
+      youtubeApiCallbacks = [];
+    };
+    document.head.appendChild(tag);
   }
 
-  // Filter and Search Logic
-  let currentCategory = 'all';
+  window.onYouTubeIframeAPIReady = function() {
+    youtubeApiReady = true;
+    youtubeApiLoading = false;
+    flushYouTubeApiCallbacks();
+  };
 
-  function filterGallery(categoryId) {
-    currentCategory = categoryId;
-    
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      if (btn.dataset.filter === categoryId) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
+  // ── SCREEN TRANSITIONS ─────────────────────────────────────
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(function(s) {
+      s.classList.toggle('active', s.id === id);
+      s.classList.toggle('hidden', s.id !== id);
+    });
+  }
+
+  function showSelect() {
+    closeAbout();
+    cancelAdvance();
+    deactivateSlide(activeSlide); // only one slide plays at a time (scroll-snap)
+    activeSlide = null;
+    showScreen('screen-select');
+  }
+
+  // ── FEED SETUP ─────────────────────────────────────────────
+  function startFeed(categoryId) {
+    // Reset watched videos for a new category selection, but not overall
+    // watchedVideos = new Set(); 
+    hasScrolled     = false;
+
+    cancelAdvance();
+    deactivateSlide(activeSlide);
+    activeSlide = null;
+
+    var allSlides = Array.from(
+      document.querySelectorAll('#screen-feed .slide:not(.end-card)')
+    );
+    feedSlides = allSlides.filter(function(s) {
+      return categoryId === 'all' || s.dataset.category === categoryId;
     });
 
-    applyFilters();
-    
-    // Smooth scroll to first matching video if user is in hero section and searches/filters
-    const heroBottom = document.getElementById('hero').getBoundingClientRect().bottom;
-    if (heroBottom > 0) {
-      setTimeout(() => {
-        const firstVisibleCard = Array.from(document.querySelectorAll('.feed-card')).find(card => card.style.display !== 'none');
-        if (firstVisibleCard) {
-            firstVisibleCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }, 100);
-    }
-  }
+    allSlides.forEach(function(s) { s.style.display = 'none'; });
+    feedSlides.forEach(function(s) { s.style.display = 'flex'; });
 
-  function searchGallery() {
-    applyFilters();
-  }
-
-  function applyFilters() {
-    const searchQuery = document.getElementById('searchInput').value.toLowerCase();
-    const cards = document.querySelectorAll('.feed-card');
-    let totalVisibleVideos = 0;
-
-    cards.forEach(card => {
-      const categoryMatch = currentCategory === 'all' || card.dataset.category === currentCategory;
-      const titleMatch = card.dataset.title.includes(searchQuery);
-      const descMatch = card.dataset.desc.includes(searchQuery);
-      
-      if (categoryMatch && (searchQuery === '' || titleMatch || descMatch)) {
-        card.style.display = 'flex';
-        totalVisibleVideos++;
-      } else {
-        card.style.display = 'none';
-      }
+    // Update per-slide counters relative to filtered set
+    feedSlides.forEach(function(slide, i) {
+      var counter = slide.querySelector('[data-counter]');
+      if (counter) counter.textContent = (i + 1) + ' / ' + feedSlides.length;
     });
 
-    // Update minimap visibility to match
-    const mapCats = document.querySelectorAll('.minimap-category');
-    mapCats.forEach(cat => {
-      const isCatMatch = currentCategory === 'all' || cat.dataset.category === currentCategory;
-      let catHasVisibleDots = false;
+    // Sync all audio buttons to current isMuted state
+    syncAudioButtons();
 
-      const dots = cat.querySelectorAll('.minimap-dot');
-      dots.forEach(dot => {
-        const targetId = dot.dataset.target;
-        const targetCard = document.getElementById(targetId);
-        if(targetCard && targetCard.style.display !== 'none') {
-            dot.style.display = 'block';
-            catHasVisibleDots = true;
-        } else {
-            dot.style.display = 'none';
+    // Recap thumbnails for end card
+    elRecapGrid.innerHTML = feedSlides.map(function(s) {
+      var isWatched = watchedVideos.has(s.dataset.vid) ? ' watched' : '';
+      return '<div class="recap-thumb' + isWatched + '" style="background-image:url(\'https://img.youtube.com/vi/' +
+        s.dataset.vid + '/hqdefault.jpg\')"></div>';
+    }).join('');
+
+    var label = categoryId === 'all'
+      ? 'all presentations'
+      : (feedSlides[0] ? feedSlides[0].dataset.catLabel : 'this topic');
+    elEndTitle.textContent = 'You\'ve watched ' + label;
+
+    // Reset scroll to top
+    elFeed.scrollTo({ top: 0, behavior: 'instant' });
+
+    // Dynamic scroll hint: show if this is the first video in a new category
+    if (elScrollHint) {
+      // Check if we are starting a new category feed (not 'all' and first time for this category)
+      if (categoryId !== 'all' && !sessionStorage.getItem('seen_scroll_hint_' + categoryId)) {
+        elScrollHint.style.opacity = '1';
+        sessionStorage.setItem('seen_scroll_hint_' + categoryId, 'true');
+      } else if (categoryId === 'all' && !sessionStorage.getItem('seen_scroll_hint_all')) {
+        elScrollHint.style.opacity = '1';
+        sessionStorage.setItem('seen_scroll_hint_all', 'true');
+      } else {
+        elScrollHint.style.opacity = '0'; // Hide if already seen
+      }
+    }
+
+    showScreen('screen-feed');
+
+    // The IO observer fired at page load when feedSlides was still empty, so it
+    // bailed out for the first slide. Since the slide was already intersecting,
+    // the observer won't re-fire when the feed becomes visible. Activate manually.
+    if (feedSlides.length > 0) activateSlide(feedSlides[0]);
+  }
+
+  // ── COUNTDOWN (pre-play) ───────────────────────────────────
+  function activateSlide(slide) {
+    if (slide === activeSlide) return; // already active, no-op
+    if (activeSlide) deactivateSlide(activeSlide);
+    activeSlide = slide;
+
+    var container   = slide.querySelector('.yt-container');
+    var countdownEl = slide.querySelector('.countdown-container');
+    var playBtn     = slide.querySelector('.play-btn');
+    var digitEl     = slide.querySelector('.countdown-digit');
+    var arcEl       = slide.querySelector('.countdown-arc');
+
+    // Hide any autoplay-muted-overlay if it was visible
+    var mutedOverlay = container.querySelector('.autoplay-muted-overlay');
+    if (mutedOverlay) mutedOverlay.classList.remove('visible');
+
+    if (!countdownEl) { // safety fallback
+      loadAndPlay(container, slide.dataset.vid, isMuted);
+      return;
+    }
+
+    // Show countdown, hide static play button
+    playBtn.style.display = 'none';
+    countdownEl.style.display = 'flex';
+
+    var seconds = PREPLAY_SECONDS;
+    arcEl.style.strokeDashoffset = '0'; // start full
+
+    function tick() {
+      if (activeSlide !== slide) return; // slid away, abort
+
+      digitEl.textContent = seconds;
+      // drain the arc: offset goes from 0 → CIRCUMFERENCE over PREPLAY_SECONDS
+      var drained = ((PREPLAY_SECONDS - seconds) / PREPLAY_SECONDS) * CIRCUMFERENCE;
+      arcEl.style.strokeDashoffset = drained;
+
+      if (seconds === 0) {
+        loadAndPlay(container, slide.dataset.vid, isMuted);
+        return;
+      }
+      seconds--;
+      slide._countdownTimer = setTimeout(tick, 1000);
+    }
+    tick();
+  }
+
+  function deactivateSlide(slide) {
+    if (!slide) return;
+
+    // Cancel pre-play countdown
+    if (slide._countdownTimer) {
+      clearTimeout(slide._countdownTimer);
+      slide._countdownTimer = null;
+    }
+
+    // Reset countdown UI
+    var countdownEl = slide.querySelector('.countdown-container');
+    var playBtn     = slide.querySelector('.play-btn');
+    var arcEl       = slide.querySelector('.countdown-arc');
+    if (countdownEl) countdownEl.style.display = 'none';
+    if (playBtn)     playBtn.style.display = 'flex';
+    if (arcEl)       arcEl.style.strokeDashoffset = '0';
+
+    // Hide any autoplay-muted-overlay
+    var mutedOverlay = slide.querySelector('.autoplay-muted-overlay');
+    if (mutedOverlay) mutedOverlay.classList.remove('visible');
+
+    // Stop video
+    var container = slide.querySelector('.yt-container');
+    if (container) stopVideo(container);
+  }
+
+  // ── VIDEO HELPERS ──────────────────────────────────────────
+  function loadAndPlay(container, videoId, muted) {
+    if (!container || container.querySelector('iframe')) return;
+
+    // Hide countdown + play button — thumbnail stays in DOM as a visible backdrop
+    var countdownEl = container.querySelector('.countdown-container');
+    var playBtn     = container.querySelector('.play-btn');
+    if (countdownEl) countdownEl.style.display = 'none';
+    if (playBtn)     playBtn.style.display = 'none';
+
+    // Add loading overlay
+    var loadingOverlay = document.createElement('div');
+    loadingOverlay.className = 'video-loading-overlay visible';
+    loadingOverlay.innerHTML = '<div class="spinner"></div><div class="message">Loading EyeCue analysis...</div>';
+    container.appendChild(loadingOverlay);
+
+    var muteParam = muted ? '1' : '0';
+
+    var iframe = document.createElement('iframe');
+    iframe.src =
+      'https://www.youtube.com/embed/' + videoId +
+      '?autoplay=1&mute=' + muteParam +
+      '&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=' + YT_ORIGIN;
+    iframe.setAttribute('allow',
+      'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+    iframe.setAttribute('allowfullscreen', '');
+    // Start invisible so it fades in over the thumbnail, not as a flash
+    iframe.style.cssText =
+      'position:absolute;inset:0;width:100%;height:100%;border:0;opacity:0;transition:opacity 0.5s ease';
+
+    container.appendChild(iframe);
+
+    ensureYouTubeApi(function() {
+      if (!iframe.isConnected) return;
+
+      var player = new window.YT.Player(iframe, {
+        events: {
+          onReady: function(event) {
+            playerMap.set(container, event.target);
+
+            if (muted) event.target.mute();
+            else event.target.unMute();
+
+            event.target.playVideo();
+
+            setTimeout(function() {
+              var liveIframe = event.target.getIframe();
+              if (liveIframe) liveIframe.style.opacity = '1';
+
+              loadingOverlay.classList.remove('visible');
+              setTimeout(function() {
+                if (loadingOverlay.parentNode) loadingOverlay.parentNode.removeChild(loadingOverlay);
+              }, 300);
+
+              if (!muted) {
+                setTimeout(function() {
+                  var playerStillMounted = playerMap.get(container);
+                  if (playerStillMounted !== event.target || activeSlide !== container.closest('.slide')) return;
+
+                  if (event.target.isMuted() || event.target.getVolume() === 0) {
+                    var mutedOverlay = container.querySelector('.autoplay-muted-overlay');
+                    if (mutedOverlay) mutedOverlay.classList.add('visible');
+                  } else {
+                    autoplayAllowed = true;
+                  }
+                }, 700);
+              }
+            }, 200);
+          },
+          onStateChange: function(event) {
+            handlePlayerStateChange(event, container);
+          }
         }
       });
-
-      if (catHasVisibleDots && isCatMatch) {
-         cat.style.display = 'flex';
-      } else {
-         cat.style.display = 'none';
-      }
     });
+  }
 
-    // Toggle no results message
-    const noResultsEl = document.getElementById('no-results');
-    if (totalVisibleVideos === 0) {
-      noResultsEl.style.display = 'block';
-    } else {
-      noResultsEl.style.display = 'none';
+  function stopVideo(container) {
+    if (!container) return;
+    var player = playerMap.get(container);
+    var iframe = container.querySelector('iframe');
+
+    if (iframe) {
+      iframe.style.transition = 'opacity 0.15s';
+      iframe.style.opacity    = '0';
+    }
+
+    setTimeout(function() {
+      if (player) {
+        playerMap.delete(container);
+        player.destroy();
+      } else if (iframe && iframe.parentNode === container) {
+        container.removeChild(iframe);
+      }
+
+      if (!container.querySelector('iframe')) {
+        var playBtn = container.querySelector('.play-btn');
+        if (playBtn) playBtn.style.display = 'flex';
+      }
+
+      var loadingOverlay = container.querySelector('.video-loading-overlay');
+      if (loadingOverlay && loadingOverlay.parentNode) loadingOverlay.parentNode.removeChild(loadingOverlay);
+    }, 150);
+  }
+
+  // ── MUTE TOGGLE ────────────────────────────────────────────
+  function toggleMute(btn) {
+    isMuted = !isMuted;
+
+    if (activeSlide) {
+      var container = activeSlide.querySelector('.yt-container');
+      var player = container ? playerMap.get(container) : null;
+      if (container) {
+        var mutedOverlay = container.querySelector('.autoplay-muted-overlay');
+        if (mutedOverlay) mutedOverlay.classList.remove('visible');
+      }
+
+      if (player) {
+        if (isMuted) player.mute();
+        else {
+          player.unMute();
+          player.setVolume(100);
+        }
+        player.playVideo();
+      }
+    }
+    syncAudioButtons();
+  }
+
+  function syncAudioButtons() {
+    document.querySelectorAll('.audio-btn').forEach(function(b) {
+      b.dataset.muted = isMuted;
+      b.innerHTML = isMuted
+        ? SVG_MUTED   + ' Tap to unmute'
+        : SVG_UNMUTED + ' Tap to mute';
+    });
+  }
+
+  // ── AUTO-ADVANCE (post-video) ──────────────────────────────
+  function updateAdvanceIndicator() {
+    var idx = activeSlide ? feedSlides.indexOf(activeSlide) : -1;
+    var next = idx >= 0 ? feedSlides[idx + 1] : null;
+
+    if (elAdvanceNextTitle) {
+      elAdvanceNextTitle.textContent = next ? next.dataset.title : 'Gallery wrap-up';
+    }
+    if (elAdvanceNextLabel) {
+      elAdvanceNextLabel.innerHTML = 'Auto-forwarding in <strong id="advance-num">' + ADVANCE_SECONDS + '</strong>s';
+      elAdvanceNum = document.getElementById('advance-num');
     }
   }
 
-  // Intersection Observer for Auto-play and Minimap highlighting
-  document.addEventListener("DOMContentLoaded", function() {
-    // Add manual click-to-play support just in case
-    document.querySelectorAll('.yt-container').forEach(container => {
-        container.addEventListener('click', function() {
-            loadAndPlayVideo(this, this.getAttribute('data-vid'));
-        });
+  function startAutoAdvance() {
+    cancelAdvance();
+    updateAdvanceIndicator();
+
+    elAdvanceBar.style.display = 'flex';
+
+    // Smooth CSS fill animation — one declaration, no JS timers needed for the bar
+    elAdvanceFill.style.transition = 'none';
+    elAdvanceFill.style.width = '0%';
+    elAdvanceFill.offsetHeight; // force reflow so transition restarts cleanly
+    elAdvanceFill.style.transition = 'width ' + ADVANCE_SECONDS + 's linear';
+    elAdvanceFill.style.width = '100%';
+
+    // Single recursive tick owns ALL timer IDs — no variable overwriting
+    var seconds = ADVANCE_SECONDS;
+    function tick() {
+      elAdvanceNum.textContent = seconds;
+      if (seconds === 0) {
+        elAdvanceBar.style.display = 'none';
+        if (activeSlide) watchedVideos.add(activeSlide.dataset.vid); // Mark video as watched
+        scrollToNext();
+        return;
+      }
+      seconds--;
+      advanceTimers.push(setTimeout(tick, 1000));
+    }
+    tick(); // runs immediately (shows initial count), schedules next
+  }
+
+  function cancelAdvance() {
+    advanceTimers.forEach(function(id) { clearTimeout(id); });
+    advanceTimers = [];
+    elAdvanceBar.style.display = 'none';
+    elAdvanceFill.style.transition = 'none';
+    elAdvanceFill.style.width = '0%';
+  }
+
+  function handlePlayerStateChange(event, container) {
+    if (!activeSlide) return;
+
+    var activeContainer = activeSlide.querySelector('.yt-container');
+    if (container !== activeContainer) return;
+
+    if (event.data === window.YT.PlayerState.PLAYING) {
+      cancelAdvance();
+      if (!event.target.isMuted() && event.target.getVolume() > 0) autoplayAllowed = true;
+
+      var mutedOverlay = activeSlide.querySelector('.autoplay-muted-overlay');
+      if (mutedOverlay) mutedOverlay.classList.remove('visible');
+    } else if (event.data === window.YT.PlayerState.ENDED) {
+      if (elFeed.classList.contains('active')) startAutoAdvance();
+    }
+  }
+
+  // ── ABOUT PANEL ────────────────────────────────────────────
+  function showAbout(btn) {
+    cancelAdvance(); // Don't scroll away while the user is reading
+    var slide = btn.closest('.slide');
+    elAboutCat.textContent      = slide.dataset.catLabel;
+    elAboutTitleTxt.textContent = slide.dataset.title;
+    elAboutDescTxt.textContent  = slide.dataset.desc;
+    elAboutPanel.classList.add('open');
+    elAboutScrim.classList.add('open');
+  }
+  function closeAbout() {
+    elAboutPanel.classList.remove('open');
+    elAboutScrim.classList.remove('open');
+  }
+
+  // ── NAVIGATION ─────────────────────────────────────────────
+  function scrollToSlide(slide) {
+    if (slide) slide.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function scrollToNext() {
+    if (!activeSlide) return;
+    var idx  = feedSlides.indexOf(activeSlide);
+    var next = feedSlides[idx + 1];
+    scrollToSlide(next || document.getElementById('slide-end'));
+  }
+  function scrollToPrev() {
+    if (!activeSlide) return;
+    var prev = feedSlides[feedSlides.indexOf(activeSlide) - 1];
+    if (prev) scrollToSlide(prev);
+  }
+
+  // ── INTERSECTION OBSERVER ──────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+
+    // Click on thumbnail/countdown → skip countdown and play immediately
+    document.querySelectorAll('.yt-container').forEach(function(c) {
+      c.addEventListener('click', function() {
+        var slide = c.closest('.slide');
+        if (!slide || c.querySelector('iframe')) return;
+        if (slide._countdownTimer) {
+          clearTimeout(slide._countdownTimer);
+          slide._countdownTimer = null;
+        }
+        loadAndPlay(c, slide.dataset.vid, isMuted); // handles countdown hide internally
+      });
     });
 
-    const cards = document.querySelectorAll('.feed-card');
-    const mapLinks = document.querySelectorAll('.minimap-dot');
-    
-    // Trigger when a card has at least 50% visibility
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px', 
-      threshold: 0.5
-    };
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        var slide    = entry.target;
+        var slideIdx = feedSlides.indexOf(slide);
+        if (slide.classList.contains('end-card')) return;
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        const card = entry.target;
-        const id = card.getAttribute('id');
-        const ytContainer = card.querySelector('.yt-container');
-        const playingIndicator = card.querySelector('.playing-indicator');
+        // Ignore slides that are not part of the current filtered feed.
+        // Hidden slides (display:none from other categories) still fire IO
+        // callbacks and can incorrectly trigger activate/deactivate.
+        if (slideIdx === -1) return;
 
         if (entry.isIntersecting) {
-          // Update active states on minimap
-          mapLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('data-target') === id) {
-              link.classList.add('active');
-            }
-          });
+          cancelAdvance();
+          activateSlide(slide);
 
-          // Play video, show indicator
-          if (ytContainer) {
-             loadAndPlayVideo(ytContainer, ytContainer.getAttribute('data-vid'));
+          if (!hasScrolled && slideIdx > 0) {
+            hasScrolled = true;
+            if (elScrollHint) elScrollHint.style.opacity = '0';
           }
-          if (playingIndicator) {
-             playingIndicator.style.display = 'flex';
-          }
-
         } else {
-          // Video is leaving the screen - stop it, hide indicator
-          if (ytContainer) {
-             stopAndUnloadVideo(ytContainer);
-          }
-          if (playingIndicator) {
-             playingIndicator.style.display = 'none';
-          }
+          // Always deactivate — don't check activeSlide first.
+          // If the "entering" callback fires before this one (non-deterministic IO order),
+          // activeSlide is already the new slide, and this check would silently skip cleanup.
+          deactivateSlide(slide);
+          if (slide === activeSlide) activeSlide = null;
         }
       });
-    }, observerOptions);
+    }, { threshold: 0.55 });
 
-    cards.forEach(card => observer.observe(card));
+    document.querySelectorAll('.slide').forEach(function(s) {
+      observer.observe(s);
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      // Select screen: Space = start full feed
+      if (elSelect.classList.contains('active')) {
+        if (e.key === ' ') { e.preventDefault(); startFeed('all'); }
+        return;
+      }
+
+      if (!elFeed.classList.contains('active')) return;
+      if (e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); scrollToNext(); }
+      else if (e.key === 'ArrowUp')                { e.preventDefault(); scrollToPrev(); }
+      else if (e.key === 'm' || e.key === 'M')     { e.preventDefault(); toggleMute(); } // Mute/Unmute
+      else if (e.key === 'i' || e.key === 'I')     { e.preventDefault();
+        if (elAboutPanel.classList.contains('open')) closeAbout();
+        else if (activeSlide) showAbout(activeSlide.querySelector('.about-btn'));
+      }
+      else if (e.key === 'Escape') {
+        if (elAboutPanel.classList.contains('open')) closeAbout();
+        else showSelect();
+      }
+    });
   });
 </script>
