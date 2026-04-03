@@ -11,11 +11,11 @@
     - title: "Evaluating PROTACs for hard-to-target BRD4 protein"
       description: "A PROTAC molecule is holding the protein-of-interest closer to the E3 ligase to form a ternary complex"
       youtube_id: "QmM0NdeaV4U"
-# - system_type: "Covalent binders"
-#   videos:
-#     - title: "Sotorasib bound to KRAS"
-#       description: "Highlighting covalent and non-covalent intercations of Sotorasib in binding cavity of KRAS consisting of p-loop, switch I and switch II"
-#       youtube_id: "8dM6F0xe7Mg" # Replace with actual YouTube ID
+- system_type: "Covalent binders"
+  videos:
+    - title: "Sotorasib bound to KRAS"
+      description: "Highlighting covalent and non-covalent interactions of Sotorasib in binding cavity of KRAS consisting of p-loop, switch I and switch II"
+      youtube_id: "RxPkmd8QSKc"
 # - system_type: "Surfactants: micelle formation and fabric intercation"
 #   videos:
 #     - title: "Surfactant-cellulose interctaion"
