@@ -23,10 +23,10 @@ EyeCue then stitches the annotated frames and narration track into a final expla
 
 To know more about EyeCue, checkout the publication:
 
-> **Seeing Like a Structural Biologist: EyeCue, a Multimodal AI Agent for Interpreting MD Trajectories with Audio-Visual Explanations**  
+> [**Seeing Like a Structural Biologist: EyeCue, a Multimodal AI Agent for Interpreting MD Trajectories with Audio-Visual Explanations**](https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001639/v1)  
 > *Rajkumar Chakraborty, Irum Hussain, Gnapika Arelli, Yamini Krishna Musku, Kumari Soniya and Prasad Chodavarapu*  
 > *ChemRxiv, 2026*  
-> *DOI: TBD*
+> *DOI: 10.26434/chemrxiv.15001639/v1*
 
 # About Aganitha
 
