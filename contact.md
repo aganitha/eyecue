@@ -17,7 +17,10 @@ The EyeCue AI Agent automates interpretation of MD trajectories at expert level,
 
 ## Licensing Options
 
-1. **Commercial Use:** For use in commercial R&D pipelines.
+1. **Commercial Use:** For use in commercial R&D pipelines. Available in multiple flexible models:
+   - **Consumption-Based License (EyeCue Only):** Usage-based pricing aligned to token/compute consumption for flexible, on-demand analysis.
+   - **Fixed Monthly License (EyeCue Only):** Predictable monthly pricing for dedicated access to EyeCue capabilities.
+   - **Enterprise Platform License (Igniva Suite):** Full access to EyeCue and all agents within the Igniva platform, including customization, integrations, and enterprise-grade deployment options.
 2. **Educational Purposes:** For use by academic institutions in teaching.
 3. **Non-Commercial Research:** For use by non-profit or public funded research institutes.
 
