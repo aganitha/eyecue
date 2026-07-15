@@ -1115,41 +1115,15 @@ title: EyeCue Video Gallery
     var container = slide.querySelector('.yt-container');
     var countdownEl = slide.querySelector('.countdown-container');
     var playBtn = slide.querySelector('.play-btn');
-    var digitEl = slide.querySelector('.countdown-digit');
-    var arcEl = slide.querySelector('.countdown-arc');
 
     // Hide any autoplay-muted-overlay if it was visible
     var mutedOverlay = container.querySelector('.autoplay-muted-overlay');
     if (mutedOverlay) mutedOverlay.classList.remove('visible');
 
-    if (!countdownEl || bypassCountdown) {
-      loadAndPlay(container, slide.dataset.vid, isMuted, bypassCountdown);
-      return;
-    }
-
-    // Show countdown, hide static play button
-    playBtn.style.display = 'none';
-    countdownEl.style.display = 'flex';
-
-    var seconds = PREPLAY_SECONDS;
-    arcEl.style.strokeDashoffset = '0'; // start full
-
-    function tick() {
-      if (activeSlide !== slide) return; // slid away, abort
-
-      digitEl.textContent = seconds;
-      // drain the arc: offset goes from 0 → CIRCUMFERENCE over PREPLAY_SECONDS
-      var drained = ((PREPLAY_SECONDS - seconds) / PREPLAY_SECONDS) * CIRCUMFERENCE;
-      arcEl.style.strokeDashoffset = drained;
-
-      if (seconds === 0) {
-        loadAndPlay(container, slide.dataset.vid, isMuted, false);
-        return;
-      }
-      seconds--;
-      slide._countdownTimer = setTimeout(tick, 1000);
-    }
-    tick();
+    // Pre-play countdown removed — play immediately when a slide becomes active.
+    if (countdownEl) countdownEl.style.display = 'none';
+    if (playBtn) playBtn.style.display = 'none';
+    loadAndPlay(container, slide.dataset.vid, isMuted, bypassCountdown);
   }
 
   function deactivateSlide(slide) {
