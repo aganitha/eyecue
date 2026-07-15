@@ -793,7 +793,9 @@ title: EyeCue Video Gallery
     <p class="select-prompt">Choose a topic to begin</p>
   </div>
   <div class="all-card-row">
-    <div class="cat-card all-card" onclick="startFeed('all')">
+    <div class="cat-card all-card" role="button" tabindex="0"
+      aria-label="Watch everything — all presentations"
+      onclick="startFeed('all')" onkeydown="cardKey(event, 'all')">
       <span class="cat-icon">▶</span>
       <div>
         <div class="cat-name">Watch Everything</div>
@@ -804,7 +806,9 @@ title: EyeCue Video Gallery
   <div class="category-grid">
     {% for category in site.data.gallery %}
     {% assign cat_id = category.system_type | slugify %}
-    <div class="cat-card" onclick="startFeed('{{ cat_id }}')">
+    <div class="cat-card" role="button" tabindex="0"
+      aria-label="{{ category.system_type | escape }}, {{ category.videos | size }} video{% if category.videos.size != 1 %}s{% endif %}"
+      onclick="startFeed('{{ cat_id }}')" onkeydown="cardKey(event, '{{ cat_id }}')">
       <span class="cat-icon">🔬</span>
       <div class="cat-name">{{ category.system_type }}</div>
       <div class="cat-count">{{ category.videos | size }} video{% if category.videos.size != 1 %}s{% endif %}</div>
@@ -957,6 +961,14 @@ title: EyeCue Video Gallery
   // SVG icons for mute/unmute button — extracted so they're not duplicated inline
   var SVG_MUTED = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
   var SVG_UNMUTED = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>';
+
+  // Activate a role="button" card via keyboard (Enter / Space) — mirrors its onclick.
+  function cardKey(event, catId) {
+    if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
+      event.preventDefault();
+      startFeed(catId);
+    }
+  }
 
   // ── CACHED DOM REFERENCES ───────────────────────────────────
   // Elements that exist for the lifetime of the page — look them up once
