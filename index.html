@@ -72,128 +72,266 @@ title: EyeCue Video Gallery
     z-index: 10;
   }
 
-  /* ── SELECT SCREEN ─────────────────────────────────────────── */
+  /* ── SELECT SCREEN (light theme) ───────────────────────────── */
   #screen-select {
-    background: linear-gradient(160deg, #05081a 0%, #0b3d91 100%);
+    background:
+      radial-gradient(1100px 600px at 12% 30%, rgba(139, 180, 247, 0.14), transparent 60%),
+      radial-gradient(1100px 600px at 88% 40%, rgba(139, 180, 247, 0.16), transparent 60%),
+      linear-gradient(180deg, #ffffff 0%, #eef2fb 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0;
+    padding: 0 0 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    gap: 3rem;
+    gap: 0;
     position: relative;
     height: 100%;
+    color: #0b1f5b;
   }
+
+  /* faint molecule watermarks left & right */
+  .select-deco {
+    position: absolute;
+    pointer-events: none;
+    display: block;
+    height: auto;
+    opacity: 0.78;
+    z-index: 0;
+  }
+  .select-deco.left {
+    left: 0.5%;
+    top: 11%;
+    width: clamp(220px, 24vw, 380px);
+  }
+  .select-deco.right {
+    right: 0.5%;
+    top: 13%;
+    width: clamp(150px, 15vw, 230px);
+  }
+
+  /* Light-theme overrides for the shared header/footer on this screen */
+  #screen-select .global-header {
+    background: #ffffff;
+    border-bottom: 1px solid #e7ecf6;
+    padding-top: calc(0.7rem + env(safe-area-inset-top, 0px));
+    padding-bottom: 0.7rem;
+    z-index: 5;
+  }
+  #screen-select .logo-pill {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+  }
+  #screen-select .logo-pill:hover {
+    background: transparent;
+    box-shadow: none;
+    transform: translateY(-1px);
+  }
+  #screen-select .global-header nav a {
+    color: #56617a;
+  }
+  #screen-select .global-header nav a:hover,
+  #screen-select .global-header nav a.active {
+    color: var(--primary-color);
+    text-shadow: none;
+  }
+  #screen-select .global-header nav a.active::after {
+    background: var(--primary-color);
+  }
+  #screen-select .menu-icon { background: rgba(11, 61, 145, 0.08); }
+  #screen-select .menu-icon span { background: var(--primary-color); }
+  #screen-select .global-footer {
+    color: #7a8397;
+    border-top: 1px solid #e7ecf6;
+    padding: 2rem 2.5rem;
+  }
+  #screen-select .global-footer a { color: #56617a; }
 
   .select-header {
     text-align: center;
+    position: relative;
+    z-index: 1;
+    padding: clamp(1.25rem, 3vw, 2.25rem) 1.5rem 0;
   }
 
   .select-header h1 {
-    font-size: clamp(1.8rem, 5vw, 3.2rem);
-    color: white;
-    margin: 0 0 0.6rem;
-    letter-spacing: -1px;
-    font-weight: 800;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(1.9rem, 5vw, 3.1rem);
+    color: #10236b;
+    margin: 0;
+    letter-spacing: -0.5px;
+    font-weight: 700;
+  }
+
+  .title-rule {
+    width: 64px;
+    height: 3px;
+    margin: 0.75rem auto 1rem;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #10236b, #8bb4f7);
   }
 
   .select-tagline {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: clamp(0.9rem, 2.2vw, 1.05rem);
-    line-height: 1.65;
-    margin: 0.75rem auto 0;
-    max-width: 560px;
+    color: #4a5468;
+    font-size: clamp(0.92rem, 2vw, 1.05rem);
+    line-height: 1.6;
+    margin: 0 auto;
+    max-width: 600px;
   }
 
-  .select-prompt {
-    color: rgba(255, 255, 255, 0.38);
-    font-size: 0.82rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin: 1.5rem 0 0;
-  }
-
-  .all-card-row {
-    width: 100%;
+  /* Watch Everything button */
+  .watch-all-row {
     display: flex;
     justify-content: center;
-    margin-bottom: 2rem;
-    padding: 0 1.5rem;
-  }
-
-  .category-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1.25rem;
     width: 100%;
-    max-width: 1000px;
-    padding: 0 1.5rem;
+    padding: clamp(1rem, 2.5vw, 1.5rem) 1.5rem 0;
+    position: relative;
+    z-index: 1;
   }
-
-  .cat-card {
-    flex: 1 1 200px;
-    max-width: 320px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 16px;
-    padding: 1.75rem 1.25rem;
+  .watch-all {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    width: 100%;
+    max-width: 440px;
+    background: linear-gradient(180deg, #16327f 0%, #0f245f 100%);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 0.95rem 1.4rem;
     cursor: pointer;
-    transition: background 0.2s, transform 0.2s, border-color 0.2s;
-    text-align: center;
-    color: white;
+    font-family: inherit;
+    text-align: left;
+    box-shadow: 0 14px 30px rgba(15, 36, 95, 0.28);
+    transition: transform 0.2s, box-shadow 0.2s;
   }
-
-  .cat-card:hover {
-    background: rgba(255, 255, 255, 0.14);
-    transform: translateY(-4px);
-    border-color: rgba(255, 255, 255, 0.35);
+  .watch-all:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 38px rgba(15, 36, 95, 0.34);
   }
-
-  .cat-card:active {
-    transform: translateY(-1px);
-  }
-
-  .cat-card .cat-icon {
-    font-size: 2.2rem;
-    margin-bottom: 0.7rem;
-    display: block;
-  }
-
-  .cat-card .cat-name {
-    font-size: 0.95rem;
-    font-weight: 700;
-    line-height: 1.35;
-  }
-
-  .cat-card .cat-count {
-    font-size: 0.78rem;
-    color: rgba(255, 255, 255, 0.45);
-    margin-top: 0.3rem;
-  }
-
-  .cat-card.all-card {
-    border-color: rgba(255, 255, 255, 0.25);
-    background: rgba(11, 61, 145, 0.4);
-    flex: 0 1 660px;
-    /* target "two cells" width (2*320 + gap) */
-    max-width: 90%;
+  .watch-all .wa-play {
+    width: 42px;
+    height: 42px;
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
-    padding: 1.25rem 2rem;
+    flex-shrink: 0;
+  }
+  .watch-all .wa-copy { flex: 1; line-height: 1.25; }
+  .watch-all .wa-title { font-size: 1.05rem; font-weight: 700; }
+  .watch-all .wa-sub { font-size: 0.82rem; color: rgba(255, 255, 255, 0.65); }
+  .watch-all .wa-chevron { opacity: 0.8; flex-shrink: 0; }
+
+  /* section divider */
+  .select-prompt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    color: var(--primary-color);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    width: 100%;
+    max-width: 1120px;
+    padding: clamp(1.25rem, 3vw, 1.9rem) 1.5rem 0;
+    position: relative;
+    z-index: 1;
+  }
+  .select-prompt::before,
+  .select-prompt::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #d6ddec;
   }
 
-  .cat-card.all-card .cat-icon {
-    font-size: 1.5rem;
-    margin: 0;
+  /* topic cards */
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.1rem;
+    width: 100%;
+    max-width: 1120px;
+    padding: 1.1rem 1.5rem 0;
+    position: relative;
+    z-index: 1;
   }
 
-  .cat-card.all-card .cat-name {
-    font-size: 1.05rem;
+  .cat-card {
+    background: #ffffff;
+    border: 1px solid #e7ecf6;
+    border-radius: 14px;
+    padding: 1.2rem 1.25rem;
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+    text-align: left;
+    color: #10236b;
+    box-shadow: 0 6px 18px rgba(16, 35, 107, 0.05);
+  }
+  .cat-card:hover {
+    transform: translateY(-4px);
+    border-color: #c3d1f0;
+    box-shadow: 0 16px 32px rgba(16, 35, 107, 0.12);
+  }
+  .cat-card:active { transform: translateY(-1px); }
+
+  .cat-card .cat-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #eaf0fd;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.85rem;
+  }
+  .cat-card .cat-name {
+    font-size: 0.98rem;
+    font-weight: 700;
+    line-height: 1.3;
+    min-height: 2.5em;
+    text-transform: capitalize;
+  }
+  .cat-card .cat-count {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.83rem;
+    color: #7a8397;
+    margin-top: 0.5rem;
+  }
+  .cat-card .cat-explore {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-top: 0.85rem;
+  }
+
+  .select-body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1 0 auto;
+    padding-bottom: 2.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .category-grid { grid-template-columns: repeat(2, 1fr); }
+    .cat-card .cat-name { min-height: 0; }
+    .select-deco { display: none; }
+  }
+  @media (max-width: 520px) {
+    .category-grid { grid-template-columns: 1fr; }
   }
 
   /* ── FEED SCREEN ───────────────────────────────────────────── */
@@ -784,36 +922,58 @@ title: EyeCue Video Gallery
 <div id="screen-select" class="screen active">
   {% include header.html %}
 
+  <!-- LEFT: protein ribbon render -->
+  <img class="select-deco left" src="{{ '/assets/img/decor-protein.png' | relative_url }}" alt="" aria-hidden="true">
+  <!-- RIGHT: molecule (ball-and-stick) render -->
+  <img class="select-deco right" src="{{ '/assets/img/decor-molecule.png' | relative_url }}" alt="" aria-hidden="true">
 
+  <div class="select-body">
+    <div class="select-header">
+      <h1>EyeCue Gallery</h1>
+      <div class="title-rule"></div>
+      <p class="select-tagline">A gallery of videos generated by EyeCue, a multimodal AI agent for interpreting
+        Molecular Dynamics (MD) trajectories with audio-visual explanations.</p>
+    </div>
 
-  <div class="select-header">
-    <h1>EyeCue Gallery</h1>
-    <p class="select-tagline">A gallery of videos generated by EyeCue, a multimodal AI agent for interpreting Molecular
-      Dynamics (MD) trajectories with audio-visual explanations.</p>
-    <p class="select-prompt">Choose a topic to begin</p>
-  </div>
-  <div class="all-card-row">
-    <div class="cat-card all-card" role="button" tabindex="0"
-      aria-label="Watch everything — all presentations"
-      onclick="startFeed('all')" onkeydown="cardKey(event, 'all')">
-      <span class="cat-icon">▶</span>
-      <div>
-        <div class="cat-name">Watch Everything</div>
-        <div class="cat-count">All presentations</div>
+    <div class="watch-all-row">
+      <button class="watch-all" onclick="startFeed('all')" aria-label="Watch everything — all presentations">
+        <span class="wa-play">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+        <span class="wa-copy">
+          <span class="wa-title">Watch Everything</span><br>
+          <span class="wa-sub">All presentations</span>
+        </span>
+        <svg class="wa-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+
+    <div class="select-prompt">Choose a topic to begin</div>
+
+    <div class="category-grid">
+      {% for category in site.data.gallery %}
+      {% assign cat_id = category.system_type | slugify %}
+      <div class="cat-card" role="button" tabindex="0"
+        aria-label="{{ category.system_type | escape }}, {{ category.videos | size }} video{% if category.videos.size != 1 %}s{% endif %}"
+        onclick="startFeed('{{ cat_id }}')" onkeydown="cardKey(event, '{{ cat_id }}')">
+        <span class="cat-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/>
+            <path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/>
+          </svg>
+        </span>
+        <div class="cat-name">{{ category.system_type }}</div>
+        <div class="cat-count">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          {{ category.videos | size }} video{% if category.videos.size != 1 %}s{% endif %}
+        </div>
+        <div class="cat-explore">Explore
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
       </div>
+      {% endfor %}
     </div>
-  </div>
-  <div class="category-grid">
-    {% for category in site.data.gallery %}
-    {% assign cat_id = category.system_type | slugify %}
-    <div class="cat-card" role="button" tabindex="0"
-      aria-label="{{ category.system_type | escape }}, {{ category.videos | size }} video{% if category.videos.size != 1 %}s{% endif %}"
-      onclick="startFeed('{{ cat_id }}')" onkeydown="cardKey(event, '{{ cat_id }}')">
-      <span class="cat-icon">🔬</span>
-      <div class="cat-name">{{ category.system_type }}</div>
-      <div class="cat-count">{{ category.videos | size }} video{% if category.videos.size != 1 %}s{% endif %}</div>
-    </div>
-    {% endfor %}
+
   </div>
 
   {% include footer.html %}
