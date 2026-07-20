@@ -11,9 +11,6 @@
     - title: "Druggability assessment of the S1PR2 pocket"
       description: "Evaluating the S1PR2 transmembrane pocket for small-molecule and covalent drug design, highlighting the high-confidence druggable Pocket 1 and its ligandable cysteines"
       youtube_id: "eZj-Vmp4F1M"
-    - title: "Molecular dynamics of the S1PR2-S1P complex"
-      description: "Trajectory of the S1PR2 receptor bound to its cognate ligand S1P, showing the key hydrophobic contacts, hydrogen bonds and the ARG97 salt bridge that stabilise the complex"
-      youtube_id: "PLACEHOLDER_S1PR2_MD" # TODO: replace with actual YouTube ID
 - system_type: "PROTACs"
   videos:
     - title: "Evaluating PROTACs for hard-to-target BRD4 protein"
