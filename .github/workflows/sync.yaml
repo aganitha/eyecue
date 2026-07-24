@@ -1,0 +1,13 @@
+name: github-sync
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  sync:
+    uses: aganitha/reusable-workflows/.github/workflows/svc-sync.yaml@svc-sync-v1.2
+    secrets: inherit
+
+
+
