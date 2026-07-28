@@ -179,7 +179,7 @@ body {
   }
 
   /* When menu is open, prevent scrolling */
-  body:has(#menu-toggle:checked) {
+  body:has(.menu-toggle:checked) {
     overflow: hidden;
   }
 }

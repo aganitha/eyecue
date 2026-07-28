@@ -3,8 +3,9 @@
     <img src="{{ site.logo }}" alt="Aganitha AI Logo">
   </a>
   
-  <input type="checkbox" id="menu-toggle" class="menu-toggle">
-  <label for="menu-toggle" class="menu-icon">
+  {% assign toggle_id = include.toggle_id | default: 'menu-toggle' %}
+  <input type="checkbox" id="{{ toggle_id }}" class="menu-toggle">
+  <label for="{{ toggle_id }}" class="menu-icon">
     <span></span>
     <span></span>
     <span></span>
