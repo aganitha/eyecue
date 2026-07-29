@@ -255,7 +255,11 @@ title: EyeCue Video Gallery
   /* topic cards */
   .category-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    /* auto-fit + justify-content so the row stays centred whatever the card
+       count is. A fixed repeat(4, 1fr) left an empty 4th column, which read
+       as the cards being left-aligned. */
+    grid-template-columns: repeat(auto-fit, minmax(230px, 250px));
+    justify-content: center;
     gap: 1.1rem;
     width: 100%;
     max-width: 1120px;
