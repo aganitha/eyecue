@@ -1,28 +1,36 @@
-- system_type: "Class A GPCR bound to its modulators"
+# EyeCue gallery — 4 videos across 3 live cards.
+#
+# The "Oncology: Targeting Mitosis" card (KIF18A docking) is commented out
+# below. The video is rendered and ready; it only needs its YouTube ID.
+# To bring it back: uncomment the block and replace YT_ID_KIF18A_DOCKING with
+# the real 11-char ID. Card thumbnails come from
+# https://img.youtube.com/vi/<id>/hqdefault.jpg, so an unfilled ID renders a
+# blank image and an embed that will not play.
+
+- system_type: "GPCR Drug Discovery"
   videos:
-    - title: "Cognate ligand S1P bound to S1PR1"
-      description: "S1P is interacting with the membrane bound S1PR1 through hydrophilic head towards the extracellular region and hydrophobic tail inside the transmembrane helices"
-      youtube_id: "xExiF_tsCS0"
-    - title: "FDA approved drug Siponimod interacting with membrane bound S1PR1"
-      description: "Siponimod has a polar head towards the extracellular region and a hydrophobic tail interctaing with residues in the transmembrane region  "
-      youtube_id: "4cr_57ANx4Y"
-- system_type: "S1PR2: druggability and dynamics"
-  videos:
-    - title: "Druggability assessment of the S1PR2 pocket"
-      description: "Evaluating the S1PR2 transmembrane pocket for small-molecule and covalent drug design, highlighting the high-confidence druggable Pocket 1 and its ligandable cysteines"
-      youtube_id: "eZj-Vmp4F1M"
-- system_type: "PROTACs"
-  videos:
-    - title: "Evaluating PROTACs for hard-to-target BRD4 protein"
-      description: "A PROTAC molecule is holding the protein-of-interest closer to the E3 ligase to form a ternary complex"
-      youtube_id: "QmM0NdeaV4U"
-- system_type: "Covalent binders"
-  videos:
-    - title: "Sotorasib bound to KRAS"
-      description: "Highlighting covalent and non-covalent interactions of Sotorasib in binding cavity of KRAS consisting of p-loop, switch I and switch II"
-      youtube_id: "RxPkmd8QSKc"
-# - system_type: "Surfactants: micelle formation and fabric intercation"
+    - title: "Druggability of the S1PR2 pocket"
+      description: "Three P2Rank pockets scored side by side — 0.991 against 0.151 and 0.069 — resolving to a single buried transmembrane cavity and the four ligandable cysteines that line it"
+      youtube_id: "1H0VWWrk_vs"
+    - title: "A receptor that moves everywhere except its pocket"
+      description: "Fifty thousand frames of S1P bound to S1PR2, where four contacts hold in every single frame and the receptor turns out to be flexible everywhere except the site that matters"
+      youtube_id: "SP1hRgdt5oM"
+
+# Ready to go live once the KIF18A docking video has a YouTube ID.
+# - system_type: "Oncology: Targeting Mitosis"
 #   videos:
-#     - title: "Surfactant-cellulose interctaion"
-#       description: "Surfactant molecules above c.m.c. forming short miceller aggregates to interact with different faces of cellulose fibril"
-#       youtube_id: "8dM6F0xe7Mg" # Replace with actual YouTube ID
+#     - title: "Two inhibitors, one interface pocket"
+#       description: "Two inhibitors docked into the same groove at the KIF18A–alpha-tubulin interface, poses only 1.4 Å apart, showing where they share an anchor and where they diverge"
+#       youtube_id: "YT_ID_KIF18A_DOCKING"
+
+- system_type: "Transcription Factors and Cell Fate"
+  videos:
+    - title: "How OCT-4 reads DNA"
+      description: "The bipartite POU domain of OCT-4 gripping both faces of the DNA helix, with the invariant asparagine that hydrogen-bonds adenine in the major groove"
+      youtube_id: "NbJJe7P4Nuw"
+
+- system_type: "Ligand Unbinding Kinetics"
+  videos:
+    - title: "A Factor Xa inhibitor leaving its pocket"
+      description: "A complete unbinding event with timestamps — an anticoagulant breaking its first contacts, holding at a long-lived intermediate, moving back toward the protein, then releasing"
+      youtube_id: "iSxudu2GQCI"
