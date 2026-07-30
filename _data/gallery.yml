@@ -27,10 +27,10 @@
   videos:
     - title: "How OCT4 reads DNA"
       description: "Structural characterization of the OCT4-DNA complex uncovers a key regulatory feature: the interdomain linker forms a surface-exposed α-helix that functions as a protein–protein interaction interface, providing molecular insights into OCT4-driven cellular reprogramming."
-      youtube_id: "NbJJe7P4Nuw"
+      youtube_id: "Bj-PuGNuyy0"
 
 - system_type: "Ligand Unbinding Kinetics"
   videos:
     - title: "Capturing the Unbinding Pathway of a Factor Xa Inhibitor"
-      description: "Molecular dynamics simulation captures the spontaneous dissociation of a Factor Xa inhibitor from its binding site, revealing the dynamic nature of ligand unbinding and the molecular interactions governing inhibitor residence within the active site."
+      description: "Scaled molecular dynamics captures the dissociation of a Factor Xa inhibitor from its binding site, revealing the dynamic nature of ligand unbinding and the molecular interactions governing inhibitor residence within the active site."
       youtube_id: "iSxudu2GQCI"
