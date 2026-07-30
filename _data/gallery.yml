@@ -10,10 +10,10 @@
 - system_type: "GPCR Drug Discovery"
   videos:
     - title: "Druggability of the S1PR2 pocket"
-      description: "Three P2Rank pockets scored side by side — 0.991 against 0.151 and 0.069 — resolving to a single buried transmembrane cavity and the four ligandable cysteines that line it"
+      description: "Druggability assessment of S1PR2 identifies three potential binding pockets, with one emerging as a promising buried transmembrane cavity featuring complementary polar and hydrophobic interactions for ligand binding and strategically positioned cysteines enabling covalent ligand design."
       youtube_id: "1H0VWWrk_vs"
-    - title: "A receptor that moves everywhere except its pocket"
-      description: "Fifty thousand frames of S1P bound to S1PR2, where four contacts hold in every single frame and the receptor turns out to be flexible everywhere except the site that matters"
+    - title: "Structural Basis of S1P Recognition in S1PR2"
+      description: "S1P, a bioactive signaling lipid, maintains stable binding within the rigid transmembrane cavity throughout the simulation. Its polar head group is stabilized by electrostatic interactions, while the hydrophobic tail is accommodated within a complementary hydrophobic pocket."
       youtube_id: "SP1hRgdt5oM"
 
 # Ready to go live once the KIF18A docking video has a YouTube ID.
@@ -25,12 +25,12 @@
 
 - system_type: "Transcription Factors and Cell Fate"
   videos:
-    - title: "How OCT-4 reads DNA"
-      description: "The bipartite POU domain of OCT-4 gripping both faces of the DNA helix, with the invariant asparagine that hydrogen-bonds adenine in the major groove"
+    - title: "How OCT4 reads DNA"
+      description: "Structural characterization of the OCT4-DNA complex uncovers a key regulatory feature: the interdomain linker forms a surface-exposed α-helix that functions as a protein–protein interaction interface, providing molecular insights into OCT4-driven cellular reprogramming."
       youtube_id: "NbJJe7P4Nuw"
 
 - system_type: "Ligand Unbinding Kinetics"
   videos:
-    - title: "A Factor Xa inhibitor leaving its pocket"
-      description: "A complete unbinding event with timestamps — an anticoagulant breaking its first contacts, holding at a long-lived intermediate, moving back toward the protein, then releasing"
+    - title: "Capturing the Unbinding Pathway of a Factor Xa Inhibitor"
+      description: "Molecular dynamics simulation captures the spontaneous dissociation of a Factor Xa inhibitor from its binding site, revealing the dynamic nature of ligand unbinding and the molecular interactions governing inhibitor residence within the active site."
       youtube_id: "iSxudu2GQCI"
