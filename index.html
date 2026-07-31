@@ -276,13 +276,25 @@ title: EyeCue Video Gallery
     position: relative;
     z-index: 1;
   }
+  /* matches .select-prompt so the two section headings read as a pair */
   .cap-heading {
-    font-size: 0.78rem;
-    letter-spacing: 1.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    color: var(--primary-color);
+    font-size: 0.82rem;
+    font-weight: 700;
     text-transform: uppercase;
-    color: #6b7a9e;
-    text-align: center;
+    letter-spacing: 1.5px;
     margin-bottom: 1.1rem;
+  }
+  .cap-heading::before,
+  .cap-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #d6ddec;
   }
   .cap-grid {
     display: grid;
