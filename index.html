@@ -268,6 +268,58 @@ title: EyeCue Video Gallery
     z-index: 1;
   }
 
+  /* capability strip — short silent loops showing what the agent does */
+  .cap-strip {
+    width: 100%;
+    max-width: 1120px;
+    padding: 2.4rem 1.5rem 0;
+    position: relative;
+    z-index: 1;
+  }
+  .cap-heading {
+    font-size: 0.78rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #6b7a9e;
+    text-align: center;
+    margin-bottom: 1.1rem;
+  }
+  .cap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 340px));
+    justify-content: center;
+    gap: 1.1rem;
+  }
+  .cap-item {
+    margin: 0;
+    background: #ffffff;
+    border: 1px solid #e7ecf6;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(16, 35, 107, 0.05);
+  }
+  .cap-video {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: #fff;
+  }
+  .cap-item figcaption {
+    padding: 0.9rem 1.05rem 1.05rem;
+    font-size: 0.83rem;
+    line-height: 1.5;
+    color: #46527a;
+  }
+  .cap-item figcaption strong {
+    display: block;
+    color: #10236b;
+    font-size: 0.92rem;
+    margin-bottom: 0.3rem;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cap-video { display: none; }
+  }
+
   .cat-card {
     background: #ffffff;
     border: 1px solid #e7ecf6;
@@ -1157,6 +1209,61 @@ title: EyeCue Video Gallery
         </div>
       </div>
       {% endfor %}
+    </div>
+
+    <div class="cap-strip">
+      <div class="cap-heading">What EyeCue does for you</div>
+      <div class="cap-grid">
+
+        <figure class="cap-item">
+          <video class="cap-video" src="{{ '/assets/clips/clip_c1.mp4' | relative_url }}"
+            poster="{{ '/assets/clips/clip_c1.jpg' | relative_url }}"
+            autoplay loop muted playsinline preload="metadata"
+            aria-label="The camera rotates until the buried ligand is no longer hidden by the protein"></video>
+          <figcaption>
+            <strong>It finds the angle that isn't blocked</strong>
+            A binding site is usually buried. EyeCue works out where the camera has to sit
+            for the site to face the viewer, instead of leaving it hidden behind the fold.
+          </figcaption>
+        </figure>
+
+        <figure class="cap-item">
+          <video class="cap-video" src="{{ '/assets/clips/clip_c2.mp4' | relative_url }}"
+            poster="{{ '/assets/clips/clip_c2.jpg' | relative_url }}"
+            autoplay loop muted playsinline preload="metadata"
+            aria-label="An opaque molecular surface turns transparent, revealing the ligand buried inside"></video>
+          <figcaption>
+            <strong>It opens up buried pockets</strong>
+            A solid surface hides everything inside it. When the residues that matter are
+            enclosed, EyeCue makes the surface transparent so you can see into the cavity.
+          </figcaption>
+        </figure>
+
+        <figure class="cap-item">
+          <video class="cap-video" src="{{ '/assets/clips/clip_c3.mp4' | relative_url }}"
+            poster="{{ '/assets/clips/clip_c3.jpg' | relative_url }}"
+            autoplay loop muted playsinline preload="metadata"
+            aria-label="The view moves from the whole protein into a close-up of the binding site and back out"></video>
+          <figcaption>
+            <strong>The camera follows the story</strong>
+            Each scene opens wide enough to place the molecule, moves in on the detail being
+            described, then pulls back — so you never lose track of where you are.
+          </figcaption>
+        </figure>
+
+        <figure class="cap-item">
+          <video class="cap-video" src="{{ '/assets/clips/clip_c4.mp4' | relative_url }}"
+            poster="{{ '/assets/clips/clip_c4.jpg' | relative_url }}"
+            autoplay loop muted playsinline preload="metadata"
+            aria-label="A molecular dynamics trajectory plays, showing the ligand leaving its binding site"></video>
+          <figcaption>
+            <strong>It plays real simulations</strong>
+            Not an animation of a single structure — these are the actual frames of a molecular
+            dynamics run, here showing an inhibitor leaving the site it was bound to.
+          </figcaption>
+        </figure>
+
+      </div>
     </div>
 
   </div>
