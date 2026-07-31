@@ -1,0 +1,11 @@
+name: demos-sync
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  sync:
+    uses: aganitha/reusable-workflows/.github/workflows/demos-sync.yaml@demos-sync-v1.0
+    secrets: inherit
+
