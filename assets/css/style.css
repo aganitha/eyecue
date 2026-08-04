@@ -414,6 +414,11 @@ body.light-page {
   border-bottom: 1px solid #e7ecf6;
   position: relative;
   z-index: 5;
+  /* Keep the same height as the gallery header (.light-screen .global-header
+     in index.html). Without this the base 1.5rem padding applies and the
+     header visibly grows when moving from Gallery to About/Contact. */
+  padding-top: calc(0.7rem + env(safe-area-inset-top, 0px));
+  padding-bottom: 0.7rem;
 }
 .light-page .logo-pill { background: transparent; box-shadow: none; padding: 0; }
 .light-page .logo-pill:hover { background: transparent; box-shadow: none; transform: translateY(-1px); }
