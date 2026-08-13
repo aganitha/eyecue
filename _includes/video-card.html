@@ -22,8 +22,7 @@
   <div class="vc-copy">
     <h3>{{ include.video.title }}</h3>
     <p>{{ include.video.description }}</p>
-    <div class="vc-actions">
-      {% include share-button.html class="share-btn share-video" kind="video" vid=include.video.youtube_id label="Copy link to this video" %}
-    </div>
   </div>
+  {% comment %} pinned to the card's top-right corner, so it sits clear of the copy {% endcomment %}
+  {% include share-button.html class="share-btn share-video" kind="video" vid=include.video.youtube_id label="Copy link to this video" %}
 </article>

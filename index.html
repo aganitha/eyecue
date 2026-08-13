@@ -550,6 +550,7 @@ title: EyeCue Video Gallery
   }
 
   .video-card {
+    position: relative; /* anchors the share button to the card's corner */
     display: grid;
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
     gap: clamp(1rem, 2.5vw, 1.75rem);
@@ -621,6 +622,7 @@ title: EyeCue Video Gallery
 
   .vc-copy h3 {
     margin: 0 0 0.6rem;
+    padding-right: 2.4rem; /* clears the corner share button */
     font-size: clamp(1rem, 2vw, 1.16rem);
     line-height: 1.35;
     font-weight: 700;
@@ -634,14 +636,21 @@ title: EyeCue Video Gallery
     line-height: 1.65;
   }
 
-  /* The thumbnail's play button is the play affordance — the only control
-     here is share. */
-  .vc-actions {
-    display: flex;
-    align-items: center;
-    margin-top: 0.9rem;
-    margin-left: -0.5rem; /* pull the round button's padding back to the text edge */
+  /* The thumbnail's play button is the play affordance; share sits in the
+     card's top-right corner, out of the copy's way. */
+  .share-video {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 2;
   }
+  /* toast hangs below here — above would run off the top of the card */
+  .share-video .share-toast {
+    top: calc(100% + 6px);
+    bottom: auto;
+    transform: translateX(-50%) translateY(-4px);
+  }
+  .share-video.copied .share-toast { transform: translateX(-50%) translateY(0); }
 
   /* Landing spot for a shared link */
   .video-card.targeted {
