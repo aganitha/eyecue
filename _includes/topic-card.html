@@ -1,0 +1,33 @@
+{% comment %}
+  One main-topic card on the home screen.
+
+  Params:
+    category — a top-level topic node from _data/gallery.yml
+
+  Sub-topics appear as chips under the title: that is how the home screen shows
+  a topic has sections inside it, without turning each one into its own card.
+{% endcomment %}
+{% assign cat_id = include.category.id | default: include.category.system_type | slugify %}
+
+<div class="cat-card" role="button" tabindex="0"
+  data-topic="{{ cat_id }}"
+  aria-label="{{ include.category.system_type | escape }}"
+  onclick="showCards('{{ cat_id }}')" onkeydown="cardKey(event, '{{ cat_id }}')">
+  <span class="cat-icon">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/>
+      <path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/>
+    </svg>
+  </span>
+  <div class="cat-name">{{ include.category.system_type }}</div>
+  {% if include.category.children %}
+  <div class="cat-chips">
+    {% for child in include.category.children %}
+    <span class="cat-chip">{{ child.system_type }}</span>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div class="cat-explore">Explore
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+  </div>
+</div>

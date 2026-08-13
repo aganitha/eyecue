@@ -5,3 +5,8 @@ _site/
 .jekyll-metadata
 vendor/
 .bundle/
+
+# local preview artifacts
+_preview*.html
+assets/img/decor-raw.png
+preview.sh

@@ -1,0 +1,90 @@
+{% comment %}
+  One fullscreen feed slide.
+
+  Params:
+    video        — a video node from _data/gallery.yml
+    cats         — space-separated topic ids this video belongs to. A child's
+                   video lists both its own id and its parent's, so "play all"
+                   on the parent picks up every child video too.
+    cat_label    — display name of the topic the video sits in
+    global_index — 1-based index across the whole gallery (slide id)
+{% endcomment %}
+<div class="slide" id="slide-{{ include.global_index }}" data-cats="{{ include.cats }}"
+  data-cat-label="{{ include.cat_label | escape }}" data-title="{{ include.video.title | escape }}"
+  data-desc="{{ include.video.description | escape }}" data-vid="{{ include.video.youtube_id }}"
+  data-global="{{ include.global_index }}">
+
+  <div class="slide-bg"
+    style="background-image:url('https://img.youtube.com/vi/{{ include.video.youtube_id }}/hqdefault.jpg')">
+  </div>
+
+  <div class="slide-video">
+    <div class="yt-container" data-vid="{{ include.video.youtube_id }}">
+      <div class="thumbnail-overlay"
+        style="background-image:url('https://img.youtube.com/vi/{{ include.video.youtube_id }}/hqdefault.jpg')">
+      </div>
+
+      <!-- countdown ring — shown when slide is active, hidden otherwise -->
+      <div class="countdown-container">
+        <div class="countdown-ring-wrap">
+          <svg class="countdown-svg" viewBox="0 0 110 110">
+            <circle class="countdown-arc-bg" cx="55" cy="55" r="45" />
+            <circle class="countdown-arc" cx="55" cy="55" r="45" />
+          </svg>
+          <span class="countdown-digit">3</span>
+        </div>
+        <div class="countdown-skip">Tap to play now</div>
+      </div>
+
+      <!-- play button — visible on inactive slides -->
+      <div class="play-btn">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="white">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+      </div>
+
+      <!-- Autoplay muted overlay — shown if browser blocks autoplay with sound -->
+      <div class="autoplay-muted-overlay" onclick="toggleMute();">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M11 5L6 9H2v6h4l5 4V5z" />
+          <line x1="23" y1="9" x2="17" y2="15" />
+          <line x1="17" y1="9" x2="23" y2="15" />
+        </svg>
+        <span>Tap to unmute and play</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-hud">
+    <div class="hud-top">
+      <button class="hud-pill" onclick="exitFeed()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+        Back
+      </button>
+    </div>
+    <div class="hud-bottom">
+      <!-- starts as "audio on" since isMuted defaults to false -->
+      <button class="hud-pill audio-btn" onclick="toggleMute(this)" data-muted="false">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M11 5L6 9H2v6h4l5 4V5z" />
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+        </svg>
+        Tap to mute
+      </button>
+      <button class="about-btn" onclick="showAbout(this)" title="About this video">i</button>
+    </div>
+  </div>
+
+  {% if include.global_index == 1 %}
+  <div class="scroll-hint" id="scroll-hint">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M12 5v14M19 12l-7 7-7-7" />
+    </svg>
+    Scroll for next
+  </div>
+  {% endif %}
+
+</div>

@@ -1,0 +1,29 @@
+{% comment %}
+  One video card on the topic screen (player left, copy right).
+
+  Params:
+    video — a video node from _data/gallery.yml
+
+  data-vid on the <article> is what the /#/video/<youtube_id> route scrolls to,
+  so it must stay in sync with the id used by the share button.
+{% endcomment %}
+<article class="video-card" data-vid="{{ include.video.youtube_id }}" id="video-{{ include.video.youtube_id }}">
+  <div class="vc-media" role="button" tabindex="0" data-vid="{{ include.video.youtube_id }}"
+    aria-label="Play video: {{ include.video.title | escape }}" onclick="playCard(this)"
+    onkeydown="cardVideoKey(event, this)">
+    <div class="vc-thumb"
+      style="background-image:url('https://img.youtube.com/vi/{{ include.video.youtube_id }}/hqdefault.jpg')"></div>
+    <div class="vc-play">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="white">
+        <path d="M8 5v14l11-7z" />
+      </svg>
+    </div>
+  </div>
+  <div class="vc-copy">
+    <h3>{{ include.video.title }}</h3>
+    <p>{{ include.video.description }}</p>
+    <div class="vc-actions">
+      {% include share-button.html class="share-btn share-video" kind="video" vid=include.video.youtube_id label="Copy link to this video" %}
+    </div>
+  </div>
+</article>

@@ -1,36 +1,57 @@
-# EyeCue gallery — 4 videos across 3 live cards.
+# EyeCue gallery — topic tree.
 #
-# The "Oncology: Targeting Mitosis" card (KIF18A docking) is commented out
-# below. The video is rendered and ready; it only needs its YouTube ID.
-# To bring it back: uncomment the block and replace YT_ID_KIF18A_DOCKING with
-# the real 11-char ID. Card thumbnails come from
-# https://img.youtube.com/vi/<id>/hqdefault.jpg, so an unfilled ID renders a
-# blank image and an embed that will not play.
+# Shape
+# -----
+#   - id:          short, STABLE url slug. It appears in shareable links
+#                  (/#/topic/<id>), so renaming a topic is safe but changing
+#                  its id breaks every link already shared. Optional — falls
+#                  back to a slug of system_type.
+#     system_type: display name of the topic card
+#     blurb:       one line shown on the parent card (optional)
+#     videos:      videos that belong to THIS topic directly
+#     children:    sub-topics, each with the same shape (one level deep)
+#
+# A parent topic can hold its own videos AND children. Its card counts both;
+# opening it shows its own videos first, then a section per child. Each child
+# also stands on its own card on the home page and has its own page/URL.
+#
+# Every video is deep-linkable by its YouTube id: /#/video/<youtube_id>.
+#
+# Card thumbnails come from https://img.youtube.com/vi/<id>/hqdefault.jpg, so an
+# unfilled youtube_id renders a blank image and an embed that will not play.
 
-- system_type: "GPCR Drug Discovery"
-  videos:
-    - title: "Druggability of the S1PR2 pocket"
-      description: "Druggability assessment of S1PR2 identifies three potential binding pockets, with one emerging as a promising buried transmembrane cavity featuring complementary polar and hydrophobic interactions for ligand binding and strategically positioned cysteines enabling covalent ligand design."
-      youtube_id: "s1RV-zTkNNo"
-    - title: "Structural Basis of S1P Recognition in S1PR2"
-      description: "S1P, a bioactive signaling lipid, maintains stable binding within the rigid transmembrane cavity throughout the simulation. Its polar head group is stabilized by electrostatic interactions, while the hydrophobic tail is accommodated within a complementary hydrophobic pocket."
-      youtube_id: "Oo7Cs9DOw6E"
+- id: "protein-ligand"
+  system_type: "Protein–Ligand Interactions"
+  blurb: "How small molecules find, hold, and leave their target sites."
+  # Videos that sit on the parent itself — i.e. protein–ligand work that is not
+  # specific to one of the sub-topics below. The KIF18A docking video is
+  # rendered and ready; it only needs its 11-char YouTube ID to go live.
+  videos: []
+  # - title: "Two inhibitors, one interface pocket"
+  #   description: "Two inhibitors docked into the same groove at the KIF18A–alpha-tubulin interface, poses only 1.4 Å apart, showing where they share an anchor and where they diverge"
+  #   youtube_id: "YT_ID_KIF18A_DOCKING"
 
-# Ready to go live once the KIF18A docking video has a YouTube ID.
-# - system_type: "Oncology: Targeting Mitosis"
-#   videos:
-#     - title: "Two inhibitors, one interface pocket"
-#       description: "Two inhibitors docked into the same groove at the KIF18A–alpha-tubulin interface, poses only 1.4 Å apart, showing where they share an anchor and where they diverge"
-#       youtube_id: "YT_ID_KIF18A_DOCKING"
+  children:
+    - id: "gpcr"
+      system_type: "GPCR Drug Discovery"
+      videos:
+        - title: "Druggability of the S1PR2 pocket"
+          description: "Druggability assessment of S1PR2 identifies three potential binding pockets, with one emerging as a promising buried transmembrane cavity featuring complementary polar and hydrophobic interactions for ligand binding and strategically positioned cysteines enabling covalent ligand design."
+          youtube_id: "s1RV-zTkNNo"
+        - title: "Structural Basis of S1P Recognition in S1PR2"
+          description: "S1P, a bioactive signaling lipid, maintains stable binding within the rigid transmembrane cavity throughout the simulation. Its polar head group is stabilized by electrostatic interactions, while the hydrophobic tail is accommodated within a complementary hydrophobic pocket."
+          youtube_id: "Oo7Cs9DOw6E"
 
-- system_type: "Transcription Factors and Cell Fate"
+    - id: "ligand-unbinding"
+      system_type: "Ligand Unbinding Dynamics"
+      videos:
+        - title: "Capturing the Unbinding Pathway of a Factor Xa Inhibitor"
+          description: "Scaled molecular dynamics captures the dissociation of a Factor Xa inhibitor from its binding site, revealing the dynamic nature of ligand unbinding and the molecular interactions governing inhibitor residence within the active site."
+          youtube_id: "-YQfArjIeNA"
+
+- id: "transcription-factors"
+  system_type: "Transcription Factors and Cell Fate"
   videos:
     - title: "How OCT4 reads DNA"
       description: "Structural characterization of the OCT4-DNA complex uncovers a key regulatory feature: the interdomain linker forms a surface-exposed α-helix that functions as a protein–protein interaction interface, providing molecular insights into OCT4-driven cellular reprogramming."
       youtube_id: "Bj-PuGNuyy0"
-
-- system_type: "Ligand Unbinding Kinetics"
-  videos:
-    - title: "Capturing the Unbinding Pathway of a Factor Xa Inhibitor"
-      description: "Scaled molecular dynamics captures the dissociation of a Factor Xa inhibitor from its binding site, revealing the dynamic nature of ligand unbinding and the molecular interactions governing inhibitor residence within the active site."
-      youtube_id: "-YQfArjIeNA"

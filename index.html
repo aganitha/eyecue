@@ -369,14 +369,6 @@ title: EyeCue Video Gallery
     min-height: 2.5em;
     text-transform: capitalize;
   }
-  .cat-card .cat-count {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.83rem;
-    color: #7a8397;
-    margin-top: 0.5rem;
-  }
   .cat-card .cat-explore {
     display: flex;
     align-items: center;
@@ -384,7 +376,33 @@ title: EyeCue Video Gallery
     font-size: 0.86rem;
     font-weight: 700;
     color: var(--primary-color);
-    margin-top: 0.85rem;
+    /* pushed to the bottom so cards line up whatever their chips add up to */
+    margin-top: auto;
+    padding-top: 0.85rem;
+  }
+  .cat-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Sub-topics as chips — how the home screen shows a topic has sections
+     inside it, without making each one its own card. */
+  .cat-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.7rem;
+  }
+  .cat-chip {
+    display: inline-block;
+    padding: 0.28rem 0.6rem;
+    border-radius: 999px;
+    background: #eef3fd;
+    border: 1px solid #dee7f8;
+    color: #4a5f96;
+    font-size: 0.76rem;
+    font-weight: 600;
+    line-height: 1.35;
   }
 
   .select-body {
@@ -449,38 +467,87 @@ title: EyeCue Video Gallery
     text-transform: capitalize;
   }
 
-  .cards-count {
-    display: flex;
+  /* ── SHARE BUTTON (icon only, three placements) ─────────────── */
+  .share-btn {
+    position: relative;
+    display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    font-size: 0.85rem;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 50%;
     color: #7a8397;
-    margin-top: 0.5rem;
-  }
-
-  .play-all {
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-    background: linear-gradient(180deg, #16327f 0%, #0f245f 100%);
-    color: #fff;
-    border: none;
-    border-radius: 50px;
-    padding: 0.7rem 1.3rem;
-    font-family: inherit;
-    font-size: 0.88rem;
-    font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 10px 24px rgba(15, 36, 95, 0.24);
-    transition: transform 0.2s, box-shadow 0.2s;
-    white-space: nowrap;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
   }
-  .play-all:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 30px rgba(15, 36, 95, 0.3);
+  .share-btn:hover {
+    background: #eef3ff;
+    color: var(--primary-color);
+  }
+  .share-btn:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+  .share-btn .icon-copied { display: none; }
+  .share-btn.copied {
+    color: #0f7a4d;
+    border-color: #9fdcc0;
+    background: #effaf4;
+  }
+  .share-btn.copied .icon-share { display: none; }
+  .share-btn.copied .icon-copied { display: block; }
+
+  /* confirmation, so an icon-only button still says what it did */
+  .share-toast {
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    padding: 0.3rem 0.55rem;
+    border-radius: 6px;
+    background: #10236b;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s, transform 0.18s;
+  }
+  .share-btn.copied .share-toast {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
   }
 
   .cards-list { margin-top: clamp(1.1rem, 2.5vw, 1.6rem); }
+
+  /* Sub-topic section inside a topic page: a large heading, its videos below. */
+  .cards-section + .cards-section,
+  .video-card + .cards-section { margin-top: 2.6rem; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 1.1rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 2px solid #e0e7f5;
+  }
+  .section-head h3 {
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(1.25rem, 2.6vw, 1.6rem);
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    color: #10236b;
+  }
+  .section-head .share-btn {
+    margin-left: auto;
+    align-self: center;
+  }
 
   .video-card {
     display: grid;
@@ -567,21 +634,27 @@ title: EyeCue Video Gallery
     line-height: 1.65;
   }
 
-  .vc-cta {
+  /* The thumbnail's play button is the play affordance — the only control
+     here is share. */
+  .vc-actions {
     display: flex;
     align-items: center;
-    gap: 0.35rem;
     margin-top: 0.9rem;
-    font-size: 0.86rem;
-    font-weight: 700;
-    color: var(--primary-color);
+    margin-left: -0.5rem; /* pull the round button's padding back to the text edge */
   }
-  .vc-media.playing ~ .vc-copy .vc-cta { visibility: hidden; }
+
+  /* Landing spot for a shared link */
+  .video-card.targeted {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(22, 50, 127, 0.14), 0 16px 32px rgba(16, 35, 107, 0.12);
+  }
+  .cards-section.targeted .section-head {
+    border-bottom-color: var(--primary-color);
+  }
 
   @media (max-width: 820px) {
     .video-card { grid-template-columns: 1fr; }
     .cards-top { align-items: flex-start; }
-    .play-all { width: 100%; justify-content: center; }
   }
 
   /* ── FEED SCREEN ───────────────────────────────────────────── */
@@ -1200,27 +1273,11 @@ title: EyeCue Video Gallery
 
     <div class="select-prompt">Explore by topic</div>
 
+    <!-- One card per main topic. Sub-topics are not cards here — they are the
+         section headings inside a topic's page. -->
     <div class="category-grid">
       {% for category in site.data.gallery %}
-      {% assign cat_id = category.system_type | slugify %}
-      <div class="cat-card" role="button" tabindex="0"
-        aria-label="{{ category.system_type | escape }}, {{ category.videos | size }} video{% if category.videos.size != 1 %}s{% endif %}"
-        onclick="showCards('{{ cat_id }}')" onkeydown="cardKey(event, '{{ cat_id }}')">
-        <span class="cat-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/>
-            <path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/>
-          </svg>
-        </span>
-        <div class="cat-name">{{ category.system_type }}</div>
-        <div class="cat-count">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-          {{ category.videos | size }} video{% if category.videos.size != 1 %}s{% endif %}
-        </div>
-        <div class="cat-explore">Explore
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
-        </div>
-      </div>
+      {% include topic-card.html category=category %}
       {% endfor %}
     </div>
 
@@ -1291,43 +1348,32 @@ title: EyeCue Video Gallery
     <div class="cards-top">
       <div class="cards-heading">
         <h2 id="cards-title"></h2>
-        <div class="cards-count">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-          <span id="cards-count-text"></span>
-        </div>
       </div>
-      <button class="play-all" onclick="playAllInCategory()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        Play all fullscreen
-      </button>
     </div>
 
+    <!-- One group per main topic. Sub-topics are section headings inside it,
+         each with its own videos underneath — not separate pages. -->
     <div class="cards-list">
       {% for category in site.data.gallery %}
-      {% assign cat_id = category.system_type | slugify %}
+      {% assign cat_id = category.id | default: category.system_type | slugify %}
+
       <div class="cards-group" data-category="{{ cat_id }}" data-cat-label="{{ category.system_type | escape }}"
         style="display:none">
         {% for video in category.videos %}
-        <article class="video-card">
-          <div class="vc-media" role="button" tabindex="0" data-vid="{{ video.youtube_id }}"
-            aria-label="Play video: {{ video.title | escape }}" onclick="playCard(this)"
-            onkeydown="cardVideoKey(event, this)">
-            <div class="vc-thumb"
-              style="background-image:url('https://img.youtube.com/vi/{{ video.youtube_id }}/hqdefault.jpg')"></div>
-            <div class="vc-play">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="white">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </div>
+        {% include video-card.html video=video %}
+        {% endfor %}
+
+        {% for child in category.children %}
+        {% assign child_id = child.id | default: child.system_type | slugify %}
+        <section class="cards-section" data-section="{{ child_id }}" id="section-{{ child_id }}">
+          <div class="section-head">
+            <h3>{{ child.system_type }}</h3>
+            {% include share-button.html class="share-btn share-section" kind="section" topic=cat_id section=child_id label="Copy link to this sub-topic" %}
           </div>
-          <div class="vc-copy">
-            <h3>{{ video.title }}</h3>
-            <p>{{ video.description }}</p>
-            <div class="vc-cta">Play video
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
-            </div>
-          </div>
-        </article>
+          {% for video in child.videos %}
+          {% include video-card.html video=video %}
+          {% endfor %}
+        </section>
         {% endfor %}
       </div>
       {% endfor %}
@@ -1342,94 +1388,27 @@ title: EyeCue Video Gallery
      ═══════════════════════════════════════════════════════════ -->
 <div id="screen-feed" class="screen hidden">
 
+  {% comment %}
+    Slides are emitted parent-first, then each child's, so the "watch everything"
+    order follows the topic tree. data-cats carries both the child's id and its
+    parent's, which is what lets "play all" on a parent sweep up its children.
+  {% endcomment %}
   {% assign global_index = 0 %}
   {% for category in site.data.gallery %}
-  {% assign cat_id = category.system_type | slugify %}
-  {% assign cat_size = category.videos | size %}
+  {% assign cat_id = category.id | default: category.system_type | slugify %}
 
   {% for video in category.videos %}
   {% assign global_index = global_index | plus: 1 %}
-  {% assign local_index = forloop.index %}
+  {% include feed-slide.html video=video cats=cat_id cat_label=category.system_type global_index=global_index %}
+  {% endfor %}
 
-  <div class="slide" id="slide-{{ global_index }}" data-category="{{ cat_id }}"
-    data-cat-label="{{ category.system_type | escape }}" data-title="{{ video.title | escape }}"
-    data-desc="{{ video.description | escape }}" data-vid="{{ video.youtube_id }}" data-global="{{ global_index }}">
-
-    <div class="slide-bg"
-      style="background-image:url('https://img.youtube.com/vi/{{ video.youtube_id }}/hqdefault.jpg')">
-    </div>
-
-    <div class="slide-video">
-      <div class="yt-container" data-vid="{{ video.youtube_id }}">
-        <div class="thumbnail-overlay"
-          style="background-image:url('https://img.youtube.com/vi/{{ video.youtube_id }}/hqdefault.jpg')">
-        </div>
-
-        <!-- countdown ring — shown when slide is active, hidden otherwise -->
-        <div class="countdown-container">
-          <div class="countdown-ring-wrap">
-            <svg class="countdown-svg" viewBox="0 0 110 110">
-              <circle class="countdown-arc-bg" cx="55" cy="55" r="45" />
-              <circle class="countdown-arc" cx="55" cy="55" r="45" />
-            </svg>
-            <span class="countdown-digit">3</span>
-          </div>
-          <div class="countdown-skip">Tap to play now</div>
-        </div>
-
-        <!-- play button — visible on inactive slides -->
-        <div class="play-btn">
-          <svg width="34" height="34" viewBox="0 0 24 24" fill="white">
-            <path d="M8 5v14l11-7z" />
-          </svg>
-        </div>
-
-        <!-- Autoplay muted overlay — shown if browser blocks autoplay with sound -->
-        <div class="autoplay-muted-overlay" onclick="toggleMute();">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M11 5L6 9H2v6h4l5 4V5z" />
-            <line x1="23" y1="9" x2="17" y2="15" />
-            <line x1="17" y1="9" x2="23" y2="15" />
-          </svg>
-          <span>Tap to unmute and play</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="slide-hud">
-      <div class="hud-top">
-        <button class="hud-pill" onclick="exitFeed()">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-          Back
-        </button>
-        <span class="hud-pill" style="cursor:default" data-counter>{{ local_index }} / {{ cat_size }}</span>
-      </div>
-      <div class="hud-bottom">
-        <!-- starts as "audio on" since isMuted defaults to false -->
-        <button class="hud-pill audio-btn" onclick="toggleMute(this)" data-muted="false">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M11 5L6 9H2v6h4l5 4V5z" />
-            <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-          </svg>
-          Tap to mute
-        </button>
-        <button class="about-btn" onclick="showAbout(this)" title="About this video">i</button>
-      </div>
-    </div>
-
-    {% if global_index == 1 %}
-    <div class="scroll-hint" id="scroll-hint">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <path d="M12 5v14M19 12l-7 7-7-7" />
-      </svg>
-      Scroll for next
-    </div>
-    {% endif %}
-
-  </div>
+  {% for child in category.children %}
+  {% assign child_id = child.id | default: child.system_type | slugify %}
+  {% assign child_cats = cat_id | append: " " | append: child_id %}
+  {% for video in child.videos %}
+  {% assign global_index = global_index | plus: 1 %}
+  {% include feed-slide.html video=video cats=child_cats cat_label=child.system_type global_index=global_index %}
+  {% endfor %}
   {% endfor %}
   {% endfor %}
 
@@ -1502,7 +1481,6 @@ title: EyeCue Video Gallery
   var elSelect = document.getElementById('screen-select');
   var elCards = document.getElementById('screen-cards');
   var elCardsTitle = document.getElementById('cards-title');
-  var elCardsCountText = document.getElementById('cards-count-text');
   var elAdvanceBar = document.getElementById('advance-bar');
   var elAdvanceNextLabel = document.getElementById('advance-next-label');
   var elAdvanceNextTitle = document.getElementById('advance-next-title');
@@ -1530,7 +1508,7 @@ title: EyeCue Video Gallery
   var youtubeApiCallbacks = [];
   var playerMap = new WeakMap();
   var currentCategory = null;   // category shown on the cards screen
-  var feedOrigin = 'screen-select'; // screen the fullscreen feed was launched from
+  var currentFeedCategory = null; // topic id the fullscreen feed is filtered to
   var activeCardMedia = null;   // card thumbnail currently swapped for a player
 
   // ── YOUTUBE IFRAME API ────────────────────────────────────
@@ -1567,6 +1545,144 @@ title: EyeCue Video Gallery
     flushYouTubeApiCallbacks();
   };
 
+  // ── ROUTING ────────────────────────────────────────────────
+  // The gallery is one page, so every shareable view needs its own hash route:
+  //
+  //   #/                            home (all topics)
+  //   #/topic/<topic-id>            one topic's page (ids in _data/gallery.yml)
+  //   #/topic/<topic-id>/<section>  that page, scrolled to a sub-topic section
+  //   #/video/<youtube-id>          that video's topic page, scrolled to it
+  //   #/play/<topic-id|all>         fullscreen feed
+  //
+  // Navigation only ever writes the hash; the hashchange handler is the single
+  // place that renders. That keeps back/forward and pasted links on one path.
+  function currentRoute() {
+    var parts = (location.hash || '').replace(/^#\/?/, '').split('/');
+    return {
+      name: parts[0] || 'home',
+      arg: parts[1] ? decodeURIComponent(parts[1]) : '',
+      sub: parts[2] ? decodeURIComponent(parts[2]) : ''
+    };
+  }
+
+  // Navigating from inside the page renders immediately rather than waiting for
+  // the hashchange task: the feed starts playback on entry, and browsers only
+  // allow unmuted autoplay from inside the click's own call stack.
+  var selfNavHash = null;
+
+  function goTo(hash) {
+    if (location.hash === hash) { applyRoute(); return; } // same route re-clicked
+    selfNavHash = hash;
+    location.hash = hash;
+    applyRoute();
+  }
+
+  function onHashChange() {
+    if (location.hash === selfNavHash) { selfNavHash = null; return; } // already rendered
+    selfNavHash = null;
+    applyRoute(); // pasted link, back/forward, or a hand-edited URL
+  }
+
+  function applyRoute() {
+    var route = currentRoute();
+
+    if (route.name === 'topic') {
+      if (document.querySelector('.cards-group[data-category="' + route.arg + '"]')) {
+        renderCards(route.arg);
+        if (route.sub) focusSection(route.sub);
+        return;
+      }
+      // A sub-topic id on its own: sections used to be pages, and links to them
+      // may be out there. Open the section's topic instead of dropping to home.
+      var owner = topicForSection(route.arg);
+      if (owner) {
+        renderCards(owner);
+        focusSection(route.arg);
+        return;
+      }
+    }
+
+    if (route.name === 'video') {
+      var topic = topicForVideo(route.arg);
+      if (topic) {
+        renderCards(topic);
+        focusVideo(route.arg);
+        return;
+      }
+    }
+
+    if (route.name === 'play' && route.arg) {
+      renderFeed(route.arg);
+      return;
+    }
+
+    renderSelect(); // home, and anything unrecognised
+  }
+
+  // Public navigation — these are what the markup calls.
+  function showSelect() { goTo('#/'); }
+  function showCards(categoryId) { goTo('#/topic/' + encodeURIComponent(categoryId)); }
+  function startFeed(categoryId) {
+    goTo('#/play/' + encodeURIComponent(categoryId));
+  }
+
+  // ── SHARE LINKS ────────────────────────────────────────────
+  function absoluteUrl(hash) {
+    return location.origin + location.pathname + location.search + hash;
+  }
+
+  function copyText(text, done) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { legacyCopy(text, done); });
+    } else {
+      legacyCopy(text, done);
+    }
+  }
+
+  // execCommand fallback — clipboard API needs a secure context, and the
+  // gallery is also opened over plain http from local previews.
+  function legacyCopy(text, done) {
+    var field = document.createElement('textarea');
+    field.value = text;
+    field.setAttribute('readonly', '');
+    field.style.position = 'fixed';
+    field.style.opacity = '0';
+    document.body.appendChild(field);
+    field.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(field);
+    done(ok);
+  }
+
+  // The buttons are icon-only, so the confirmation is the icon swap plus the
+  // small toast the CSS reveals on .copied.
+  function flashCopied(btn) {
+    if (btn._copyTimer) clearTimeout(btn._copyTimer);
+    btn.classList.add('copied');
+    btn._copyTimer = setTimeout(function () {
+      btn.classList.remove('copied');
+    }, 1900);
+  }
+
+  // Which link a share button copies, from its data attributes.
+  function shareHashFor(btn) {
+    if (btn.dataset.share === 'video') {
+      return '#/video/' + encodeURIComponent(btn.dataset.shareVid);
+    }
+    if (btn.dataset.share === 'section') {
+      return '#/topic/' + encodeURIComponent(btn.dataset.shareTopic) +
+        '/' + encodeURIComponent(btn.dataset.shareSection);
+    }
+    return null;
+  }
+
+  function shareFromButton(btn) {
+    var hash = shareHashFor(btn);
+    if (!hash) return;
+    copyText(absoluteUrl(hash), function () { flashCopied(btn); });
+  }
+
   // ── SCREEN TRANSITIONS ─────────────────────────────────────
   function showScreen(id) {
     document.querySelectorAll('.screen').forEach(function (s) {
@@ -1575,7 +1691,7 @@ title: EyeCue Video Gallery
     });
   }
 
-  function showSelect() {
+  function renderSelect() {
     closeAbout();
     cancelAdvance();
     deactivateSlide(activeSlide); // only one slide plays at a time (scroll-snap)
@@ -1586,9 +1702,10 @@ title: EyeCue Video Gallery
   }
 
   // ── CARDS SCREEN ───────────────────────────────────────────
-  // Topic → list of cards (video left, description right). Videos play inline
-  // here; the fullscreen feed is only entered via an explicit "play all".
-  function showCards(categoryId) {
+  // Topic → its videos, with one large heading per sub-topic. Videos play
+  // inline here; the fullscreen feed is only entered via an explicit
+  // "play all". The count covers the whole topic, sub-topics included.
+  function renderCards(categoryId) {
     closeAbout();
     cancelAdvance();
     deactivateSlide(activeSlide);
@@ -1597,27 +1714,58 @@ title: EyeCue Video Gallery
 
     currentCategory = categoryId;
 
-    var label = '';
-    var count = 0;
+    var current = null;
     document.querySelectorAll('.cards-group').forEach(function (group) {
       var isCurrent = group.dataset.category === categoryId;
       group.style.display = isCurrent ? 'block' : 'none';
-      if (isCurrent) {
-        label = group.dataset.catLabel;
-        count = group.querySelectorAll('.video-card').length;
-      }
+      if (isCurrent) current = group;
     });
+    if (!current) { renderSelect(); return; }
 
-    elCardsTitle.textContent = label;
-    elCardsCountText.textContent = count + ' video' + (count === 1 ? '' : 's');
+    elCardsTitle.textContent = current.dataset.catLabel;
 
     showScreen('screen-cards');
     elCards.scrollTo({ top: 0, behavior: 'instant' });
   }
 
-  // "Play all fullscreen" — hands the current topic to the feed.
-  function playAllInCategory() {
-    if (currentCategory) startFeed(currentCategory, 'screen-cards');
+  // Topic id that owns a video — each video appears exactly once, inside its
+  // main topic's group.
+  function topicForVideo(vid) {
+    var card = document.querySelector('.video-card[data-vid="' + vid + '"]');
+    var group = card && card.closest('.cards-group');
+    return group ? group.dataset.category : null;
+  }
+
+  // Topic id that owns a sub-topic section.
+  function topicForSection(sectionId) {
+    var section = document.querySelector('.cards-section[data-section="' + sectionId + '"]');
+    var group = section && section.closest('.cards-group');
+    return group ? group.dataset.category : null;
+  }
+
+  // Scroll a shared link's target into view and flash it, so /#/video/… and
+  // /#/topic/…/<section> land on the right spot, not just the right page.
+  function focusTarget(el, block) {
+    if (!el) return;
+    document.querySelectorAll('.targeted').forEach(function (t) {
+      t.classList.remove('targeted');
+    });
+    el.classList.add('targeted');
+    // Let the screen finish becoming visible before measuring scroll position.
+    setTimeout(function () {
+      el.scrollIntoView({ behavior: 'smooth', block: block });
+    }, 60);
+    setTimeout(function () { el.classList.remove('targeted'); }, 2600);
+  }
+
+  function focusVideo(vid) {
+    var group = document.querySelector('.cards-group[data-category="' + currentCategory + '"]');
+    focusTarget(group && group.querySelector('.video-card[data-vid="' + vid + '"]'), 'center');
+  }
+
+  function focusSection(sectionId) {
+    var group = document.querySelector('.cards-group[data-category="' + currentCategory + '"]');
+    focusTarget(group && group.querySelector('.cards-section[data-section="' + sectionId + '"]'), 'start');
   }
 
   // Swap a card thumbnail for a live player. Only one card plays at a time.
@@ -1653,11 +1801,10 @@ title: EyeCue Video Gallery
   }
 
   // ── FEED SETUP ─────────────────────────────────────────────
-  function startFeed(categoryId, origin) {
+  function renderFeed(categoryId) {
     stopCardVideo();
-    feedOrigin = origin || 'screen-select';
     // Reset watched videos for a new category selection, but not overall
-    // watchedVideos = new Set(); 
+    // watchedVideos = new Set();
     hasScrolled = false;
 
     cancelAdvance();
@@ -1667,18 +1814,17 @@ title: EyeCue Video Gallery
     var allSlides = Array.from(
       document.querySelectorAll('#screen-feed .slide:not(.end-card)')
     );
+    // data-cats lists the video's own topic and, for a sub-topic video, its
+    // parent — so playing a parent collection sweeps up every child video.
     feedSlides = allSlides.filter(function (s) {
-      return categoryId === 'all' || s.dataset.category === categoryId;
+      return categoryId === 'all' ||
+        s.dataset.cats.split(' ').indexOf(categoryId) !== -1;
     });
+    if (!feedSlides.length) { renderSelect(); return; }
+    currentFeedCategory = categoryId;
 
     allSlides.forEach(function (s) { s.style.display = 'none'; });
     feedSlides.forEach(function (s) { s.style.display = 'flex'; });
-
-    // Update per-slide counters relative to filtered set
-    feedSlides.forEach(function (slide, i) {
-      var counter = slide.querySelector('[data-counter]');
-      if (counter) counter.textContent = (i + 1) + ' / ' + feedSlides.length;
-    });
 
     // Sync all audio buttons to current isMuted state
     syncAudioButtons();
@@ -1999,9 +2145,13 @@ title: EyeCue Video Gallery
   }
 
   // ── NAVIGATION ─────────────────────────────────────────────
-  // Leaving the feed returns to whichever screen launched it.
+  // Leaving the feed goes up one level: to the topic page it was playing, or
+  // home for "watch everything". Derived from the feed itself, so it also does
+  // the right thing when someone lands directly on a /#/play/… link.
   function exitFeed() {
-    if (feedOrigin === 'screen-cards' && currentCategory) showCards(currentCategory);
+    var isTopic = currentFeedCategory && currentFeedCategory !== 'all' &&
+      document.querySelector('.cards-group[data-category="' + currentFeedCategory + '"]');
+    if (isTopic) showCards(currentFeedCategory);
     else showSelect();
   }
 
@@ -2113,5 +2263,20 @@ title: EyeCue Video Gallery
         else exitFeed();
       }
     });
+
+    // Share buttons are delegated — they sit inside cards whose own click
+    // handlers must not fire, hence the stopPropagation.
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest && e.target.closest('.share-btn');
+      if (!btn) return;
+      e.stopPropagation();
+      e.preventDefault();
+      shareFromButton(btn);
+    });
+
+    // Router last: the slides and card groups it renders into must exist first.
+    // Covers pasted links, refreshes, and browser back/forward alike.
+    window.addEventListener('hashchange', onHashChange);
+    applyRoute();
   });
 </script>

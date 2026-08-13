@@ -1,0 +1,32 @@
+{% comment %}
+  Icon-only share button. Used on video cards, sub-topic headings and the topic
+  header — the icon carries the meaning, so no visible label.
+
+  Params:
+    class   — classes for the button (always include "share-btn")
+    label   — accessible name and tooltip, e.g. "Copy link to this video"
+    kind    — "video" | "section" | "topic"; picks which link is copied
+    vid     — youtube id      (kind: video)
+    topic   — topic id        (kind: section)
+    section — sub-topic id    (kind: section)
+
+  What to copy is carried in data attributes rather than an inline onclick: a
+  single delegated handler reads them, and Jekyll's include tag cannot take a
+  param value with nested quotes anyway.
+{% endcomment %}
+<button type="button" class="{{ include.class }}" data-share="{{ include.kind }}"
+  {% if include.vid %}data-share-vid="{{ include.vid }}"{% endif %}
+  {% if include.topic %}data-share-topic="{{ include.topic }}"{% endif %}
+  {% if include.section %}data-share-section="{{ include.section }}"{% endif %}
+  aria-label="{{ include.label }}" title="{{ include.label }}">
+  <svg class="icon-share" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/>
+    <path d="M16 6l-4-4-4 4"/><path d="M12 2v14"/>
+  </svg>
+  <svg class="icon-copied" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M20 6L9 17l-5-5"/>
+  </svg>
+  <span class="share-toast" role="status">Link copied</span>
+</button>
