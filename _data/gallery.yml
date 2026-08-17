@@ -42,6 +42,13 @@
           description: "S1P, a bioactive signaling lipid, maintains stable binding within the rigid transmembrane cavity throughout the simulation. Its polar head group is stabilized by electrostatic interactions, while the hydrophobic tail is accommodated within a complementary hydrophobic pocket."
           youtube_id: "Oo7Cs9DOw6E"
 
+    - id: "kinases"
+      system_type: "Kinase Drug Discovery"
+      videos:
+        - title: "An inhibitor bound past the p38α gatekeeper"
+          description: "Molecular dynamics of PDB entry 1W82 shows an inhibitor that makes no contact with the kinase hinge in any sampled frame, extending instead past the threonine gatekeeper into the back pocket, where persistent polar contacts with the αC helix glutamate and the DFG aspartate hold the pose. Because the back pocket is far less conserved across the kinome than the hinge, its shape offers a structural rationale for selectivity."
+          youtube_id: "uFvLnqe-cS8"
+
     - id: "ligand-unbinding"
       system_type: "Ligand Unbinding Dynamics"
       videos:
