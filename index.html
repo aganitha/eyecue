@@ -258,7 +258,11 @@ title: EyeCue Video Gallery
     /* auto-fit + justify-content so the row stays centred whatever the card
        count is. A fixed repeat(4, 1fr) left an empty 4th column, which read
        as the cards being left-aligned. */
-    grid-template-columns: repeat(auto-fit, minmax(300px, 400px));
+    /* Upper bound is what sets the card width while there are only two topics:
+       2 x 480 + gap = 980px, so they use the 1120px row instead of sitting
+       narrow in the middle of it. A third topic still fits - auto-fit shrinks
+       the columns toward the 300px floor rather than wrapping. */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 480px));
     justify-content: center;
     gap: 1.25rem;
     width: 100%;
