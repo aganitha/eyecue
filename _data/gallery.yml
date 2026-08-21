@@ -59,9 +59,9 @@
           description: "Scaled molecular dynamics captures the dissociation of a Factor Xa inhibitor from its binding site, revealing the dynamic nature of ligand unbinding and the molecular interactions governing inhibitor residence within the active site."
           youtube_id: "-YQfArjIeNA"
 
-- id: "transcription-factors"
-  system_type: "Protein–DNA Complexes"
-  blurb: "How regulatory proteins find, read, and hold on to their DNA sites."
+- id: "biomolecular-complexes"
+  system_type: "Biomolecular Complexes"
+  blurb: "How biomolecules recognise their partners and hold the contact."
   videos:
     - title: "How OCT4 reads DNA"
       description: "Structural characterization of the OCT4-DNA complex uncovers a key regulatory feature: the interdomain linker forms a surface-exposed α-helix that functions as a protein–protein interaction interface, providing molecular insights into OCT4-driven cellular reprogramming."
