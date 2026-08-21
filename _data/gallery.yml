@@ -61,6 +61,7 @@
 
 - id: "transcription-factors"
   system_type: "Protein–DNA Complexes"
+  blurb: "How regulatory proteins find, read, and hold on to their DNA sites."
   videos:
     - title: "How OCT4 reads DNA"
       description: "Structural characterization of the OCT4-DNA complex uncovers a key regulatory feature: the interdomain linker forms a surface-exposed α-helix that functions as a protein–protein interaction interface, providing molecular insights into OCT4-driven cellular reprogramming."

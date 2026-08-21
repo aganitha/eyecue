@@ -6,6 +6,9 @@
 
   Sub-topics appear as chips under the title: that is how the home screen shows
   a topic has sections inside it, without turning each one into its own card.
+
+  The blurb sits between the two. A topic with no children has no chips, so
+  without it the card is a title and nothing else.
 {% endcomment %}
 {% assign cat_id = include.category.id | default: include.category.system_type | slugify %}
 
@@ -22,6 +25,9 @@
     </span>
     <div class="cat-name">{{ include.category.system_type }}</div>
   </div>
+  {% if include.category.blurb %}
+  <div class="cat-blurb">{{ include.category.blurb }}</div>
+  {% endif %}
   {% if include.category.children %}
   <div class="cat-chips">
     {% for child in include.category.children %}

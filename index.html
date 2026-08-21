@@ -388,6 +388,16 @@ title: EyeCue Video Gallery
     flex-direction: column;
   }
 
+  /* One line saying what the topic covers. Carries the card on its own when a
+     topic has no sub-topics and so renders no chips. */
+  .cat-card .cat-blurb {
+    margin-top: 0.75rem;
+    font-size: 0.87rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #5a6c99;
+  }
+
   /* Sub-topics as chips — how the home screen shows a topic has sections
      inside it, without making each one its own card. */
   .cat-chips {
