@@ -42,7 +42,7 @@
           description: "S1P, a bioactive signaling lipid, maintains stable binding within the rigid transmembrane cavity throughout the simulation. Its polar head group is stabilized by electrostatic interactions, while the hydrophobic tail is accommodated within a complementary hydrophobic pocket."
           youtube_id: "Oo7Cs9DOw6E"
         - title: "Siponimod in S1PR1: a hydrophobic pocket with a single polar anchor"
-          description: "One microsecond of all-atom molecular dynamics on a docked model of siponimod, the approved multiple sclerosis drug, in sphingosine-1-phosphate receptor 1. Eighteen residues line the orthosteric pocket and stay in contact for the whole trajectory, but fifteen of them form no polar contact in any sampled frame — the drug is held almost entirely by hydrophobic packing. Tyrosine 77 supplies essentially all of the polar recognition at seventy percent occupancy, and the pocket wall stays rigid at 0.6 Å RMSF while the most mobile loop, thirty-two angstroms away on the intracellular side, swings by seven."
+          description: "A 1-μs all-atom MD simulation of docked siponimod in S1PR1 identified that binding is predominantly driven by hydrophobic packing along with a principal polar interaction with Tyr77. The pocket remained conformationally rigid whereas the most mobile intracellular loop was located 32 Å from the binding site."
           youtube_id: "q1eycDu3xVo"
 
     - id: "kinases"
@@ -60,7 +60,7 @@
           youtube_id: "-YQfArjIeNA"
 
 - id: "transcription-factors"
-  system_type: "Transcription Factors and Cell Fate"
+  system_type: "Protein–DNA Complexes"
   videos:
     - title: "How OCT4 reads DNA"
       description: "Structural characterization of the OCT4-DNA complex uncovers a key regulatory feature: the interdomain linker forms a surface-exposed α-helix that functions as a protein–protein interaction interface, providing molecular insights into OCT4-driven cellular reprogramming."
