@@ -46,7 +46,7 @@
       system_type: "Kinase Drug Discovery"
       videos:
         - title: "An inhibitor bound past the p38α gatekeeper"
-          description: "Molecular dynamics of PDB entry 1W82 shows an inhibitor that makes no contact with the kinase hinge in any sampled frame, extending instead past the threonine gatekeeper into the back pocket, where persistent polar contacts with the αC helix glutamate and the DFG aspartate hold the pose. Because the back pocket is far less conserved across the kinome than the hinge, its shape offers a structural rationale for selectivity."
+          description: "Molecular dynamics of PDB entry 1W82 shows an inhibitor that binds to p38α without the usual hinge interaction, opens a hidden hydrophobic back pocket, and then uses its larger structure to fill that pocket. Because the back pocket is far less conserved across the kinome than the hinge, its shape offers a structural rationale for selectivity."
           youtube_id: "uFvLnqe-cS8"
 
     - id: "ligand-unbinding"
