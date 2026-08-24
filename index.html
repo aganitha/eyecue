@@ -267,6 +267,12 @@ title: EyeCue Video Gallery
        same width, whatever the topic count. */
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     justify-content: center;
+    /* Grid's default is to stretch every card to the row's tallest member. A
+       topic with no children has no chips, so stretching it to match a
+       chip-heavy neighbour left a slab of dead space above Explore. Sizing
+       each card to its own content instead means a childless topic is just a
+       shorter card, not a taller one with a gap in it. */
+    align-items: start;
     gap: 1.25rem;
     width: 100%;
     max-width: 1120px;
