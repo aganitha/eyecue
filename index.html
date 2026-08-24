@@ -267,15 +267,20 @@ title: EyeCue Video Gallery
        same width, whatever the topic count. */
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     justify-content: center;
-    /* Grid's default is to stretch every card to the row's tallest member. A
-       topic with no children has no chips, so stretching it to match a
-       chip-heavy neighbour left a slab of dead space above Explore. Sizing
-       each card to its own content instead means a childless topic is just a
-       shorter card, not a taller one with a gap in it. */
-    align-items: start;
+    /* Cards must read as one uniform row regardless of how much content each
+       topic has, so every card stretches to the row's tallest member (grid's
+       default - stated explicitly here since it has been toggled before). A
+       childless topic ends up with a bit more space above Explore than a
+       chip-heavy one; that is the accepted trade for staying visually even. */
+    align-items: stretch;
     gap: 1.25rem;
     width: 100%;
-    max-width: 1120px;
+    /* Wider than the 1120px other sections use: at 1120, three equal 1fr
+       columns land at ~360px each, narrower than the cards read as before a
+       third topic existed. Nothing below this row shares its edge (no border,
+       no card behind it), so widening just this row does not misalign
+       against .cap-strip or anything else still capped at 1120. */
+    max-width: 1500px;
     padding: 1.1rem 1.5rem 0;
     position: relative;
     z-index: 1;
