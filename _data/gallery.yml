@@ -67,10 +67,15 @@
       description: "Structural characterization of the OCT4-DNA complex uncovers a key regulatory feature: the interdomain linker forms a surface-exposed α-helix that functions as a protein–protein interaction interface, providing molecular insights into OCT4-driven cellular reprogramming."
       youtube_id: "Bj-PuGNuyy0"
 
-- id: "surfactants"
-  system_type: "Surfactants and Interfaces"
-  blurb: "How surfactants assemble in water and stick to the surfaces they act on."
-  videos:
-    - title: "Why a nonionic surfactant sticks to cotton and a cationic one doesn't"
-      description: "Cotton is washed with surfactants—but two common types behave very differently on the fibre. In all-atom molecular dynamics, cationic Arquad and nonionic EO7 first assemble into a single mixed bilayer in water. When that aggregate reaches a cellulose fibril, both surfactants adsorb—but EO7 forms far more contacts with cellulose: 389 vs. 90 for Arquad. The key difference is chemistry. EO7's ethoxylate head contains eight oxygens that can form hydrogen bonds with cellulose hydroxyls. Arquad forms none. A second simulation, starting with dispersed molecules instead of a pre-formed aggregate, shows the same trend."
-      youtube_id: "4gWfK_UGQDg"
+- id: "interfacial-simulations"
+  system_type: "Interfacial Simulations"
+  blurb: "How molecules organise at the interfaces between water, surfaces, and materials."
+  videos: []
+
+  children:
+    - id: "surfactant-fabric"
+      system_type: "Surfactant-Fabric Simulations"
+      videos:
+        - title: "Why a nonionic surfactant sticks to cotton and a cationic one doesn't"
+          description: "In all-atom molecular dynamics simulations, cationic Arquad and nonionic EO7 forms a mixed bilayer in water and subsequently adsorb onto cellulose fibrils. EO7 exhibits substantially greater cellulose interaction due to presence of ethoxylate headgroup which can hydrogen bond with cellulose. Simulations initiated from dispersed surfactants reproduce the same trend, confirming the robustness of the observed behaviour."
+          youtube_id: "4gWfK_UGQDg"
