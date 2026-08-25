@@ -11,9 +11,31 @@ toc: true
 
 EyeCue is a multimodal AI agent skill for interpreting molecular dynamics (MD) trajectories and generating audio-visual explanations.
 
-EyeCue is part of the [Igniva](https://www.aganitha.ai/products/igniva/) suite of AI Agents for R&D in BioPharma and Consumer care, developed by [Aganitha.ai](https://www.aganitha.ai/).
+EyeCue is part of the MD skill pack in [Igniva](https://www.aganitha.ai/products/igniva/) suite of AI Agents for R&D in BioPharma and Consumer care, developed by [Aganitha.ai](https://www.aganitha.ai/).
 
-### MD Skill Pack Overview
+### MD Skill Pack: 𝐀𝐈 𝐒𝐤𝐢𝐥𝐥𝐬 𝐟𝐨𝐫 𝐄𝐯𝐞𝐫𝐲 𝐒𝐭𝐞𝐩 𝐨𝐟 𝐌𝐨𝐥𝐞𝐜𝐮𝐥𝐚𝐫 𝐃𝐲𝐧𝐚𝐦𝐢𝐜𝐬 - 𝐚𝐧𝐝 𝐁𝐞𝐲𝐨𝐧𝐝
+
+Molecular dynamics can generate rich mechanistic insights. But bridging the gap from a scientific question to the right simulation, analysis, and decision? That still demands serious scientific reasoning.
+
+With Igniva™ MD Skill Packs, we are bringing AI-assisted decision-making into MD workflows.
+
+Instead of simply automating simulation steps, Igniva™  MD Skill Packs help scientists work through the questions that matter at each stage:
+
+→ What does science tell us about this system?
+→ Which protocols and parameters fit this problem?
+→ How should I prepare the molecular system?
+→ What's actually happening in the trajectory- and what does it mean for my scientific question?
+→ What should I do next?
+
+Whether you're working on protein–ligand interactions, therapeutic modalities, formulation, LNPs, interfaces, polymers, or materials - the framework adapts across diverse scientific contexts.
+
+At the interpretation layer, EyeCue™ takes it further. It adds multimodal explanations of MD trajectories, turning complex simulation outputs into comprehensible, narrated audio-visual insights.
+
+The evolution:
+🔄 FROM: Automating workflow steps
+🎯 TO: Augmenting scientific reasoning
+
+We are making MD responsive to the scientific question - not just the workflow. From workflow automation toward intelligent scientific decision-making.
 
 <div class="video-embed">
   <iframe src="https://www.youtube.com/embed/aQF0khmmVII" title="MD Skill Pack overview" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
