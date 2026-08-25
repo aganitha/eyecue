@@ -13,6 +13,10 @@ EyeCue is a multimodal AI agent skill for interpreting molecular dynamics (MD) t
 
 EyeCue is part of the [Igniva](https://www.aganitha.ai/products/igniva/) suite of AI Agents for R&D in BioPharma and Consumer care, developed by [Aganitha.ai](https://www.aganitha.ai/).
 
+<div class="video-embed">
+  <iframe src="https://www.youtube.com/embed/aQF0khmmVII" title="MD Skill Pack overview" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
+
 ## How EyeCue Works
 
 EyeCue transforms long molecular dynamics (MD) trajectories into compact, annotated, multi-view videos suitable for direct analysis by a multimodal large language model (LLM). When prompted to “watch”, the LLM produces structured, frame-indexed narration that explicitly references temporal segments to justify observations related to ligand binding, pose reorientation, and conformational transitions. 
