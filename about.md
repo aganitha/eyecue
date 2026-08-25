@@ -13,7 +13,7 @@ EyeCue is a multimodal AI agent skill for interpreting molecular dynamics (MD) t
 
 EyeCue is part of the MD skill pack in [Igniva](https://www.aganitha.ai/products/igniva/) suite of AI Agents for R&D in BioPharma and Consumer care, developed by [Aganitha.ai](https://www.aganitha.ai/).
 
-### MD Skill Pack: 𝐀𝐈 𝐒𝐤𝐢𝐥𝐥𝐬 𝐟𝐨𝐫 𝐄𝐯𝐞𝐫𝐲 𝐒𝐭𝐞𝐩 𝐨𝐟 𝐌𝐨𝐥𝐞𝐜𝐮𝐥𝐚𝐫 𝐃𝐲𝐧𝐚𝐦𝐢𝐜𝐬 - 𝐚𝐧𝐝 𝐁𝐞𝐲𝐨𝐧𝐝
+### MD Skill Pack: AI Skills for every step of Molecular Dynamics Workflows, and beyond
 
 Molecular dynamics can generate rich mechanistic insights. But bridging the gap from a scientific question to the right simulation, analysis, and decision? That still demands serious scientific reasoning.
 
